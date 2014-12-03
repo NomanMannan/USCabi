@@ -59,11 +59,11 @@ public class Person implements Serializable {
     public Person() {
     }
 
-    public Person(String firstName, String lastName, String contactNumber, Date registrationDate, String email, byte[] image, Date dob, Address address, UserCredential user) {
+    public Person(String firstName, String lastName, String contactNumber, Date registrationNumber, String email, byte[] image, Date dob, Address address, UserCredential user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.contactNumber = contactNumber;
-        this.registrationDate = registrationDate;
+        this.registrationDate = registrationNumber;
         this.email = email;
         this.image = image;
         this.dob = dob;

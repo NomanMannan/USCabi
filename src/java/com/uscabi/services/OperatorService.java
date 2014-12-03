@@ -9,16 +9,16 @@ import com.uscabi.clientservices.IOperatorService;
 import com.uscabi.commons.Car;
 import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author noman-pc
  */
-@ManagedBean
-@SessionScoped
-public class OperatorService implements IOperatorService{
+@Named(value = "operatorController")
+@RequestScoped
+public class OperatorService implements IOperatorService {
 
     /**
      * Creates a new instance of OperatorService
@@ -70,5 +70,5 @@ public class OperatorService implements IOperatorService{
     public void disableDriver(Driver driver) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

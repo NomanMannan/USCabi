@@ -14,34 +14,94 @@ import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
 import com.uscabi.commons.Payment;
 import com.uscabi.commons.UserCredential;
-import com.uscabi.dto.idao.IAdminDAO;
+import com.uscabi.dto.idao.IUserCredentialDAO;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
+import javax.inject.Named;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.menu.MenuModel;
 
 /**
  *
  * @author noman-pc
  */
+@Named
 @ManagedBean
-@SessionScoped
-public class AdminService implements IAdminService{
+@RequestScoped
+public class AdminService implements IAdminService {
 
     /**
      * Creates a new instance of AdminService
      */
     @EJB
-    private IAdminDAO adminDAO;
-    
+    private IUserCredentialDAO userDAO;
+
+    private UserCredential userCredential;
+
+    private String selectedIncludePath;
+
+    private String manageOperator;
+
+    private String manageCar;
+
+    private String manageCustomer;
+
+    private String manageDriver;
+
+    private MenuModel model;
+
     public AdminService() {
+        this.userCredential = new UserCredential();
     }
 
+    public String getSelectedIncludePath() {
+        return selectedIncludePath;
+    }
+
+    public void setSelectedIncludePath(String selectedIncludePath) {
+        this.selectedIncludePath = selectedIncludePath;
+    }
+
+    public String manageOperator() {
+        setSelectedIncludePath("/views/admin/operator.xhtml");
+
+        return getSelectedIncludePath();
+    }
+
+    public String manageCar() {
+        setSelectedIncludePath("/views/admin/car.xhtml");
+        return getSelectedIncludePath();
+    }
+
+    public String manageCustomer() {
+        setSelectedIncludePath("/views/admin/customer.xhtml");
+        return getSelectedIncludePath();
+    }
+
+    public String manageDriver() {
+        setSelectedIncludePath("/views/admin/driver.xhtml");
+        return getSelectedIncludePath();
+    }
+
+    public void addUser(UserCredential user) {
+        this.userDAO.create(user);
+    }
+
+    public String postMessage() {
+        this.userDAO.create(userCredential);
+        return "theend";
+    }
+
+    public UserCredential getUser() {
+        return userCredential;
+    }
+
+    //test end 
     @Override
     public void addAdmin(Admin admin) {
-        adminDAO.create(admin);
-
-        
+        //this.adminDAO.create(admin);
     }
 
     @Override
@@ -176,7 +236,8 @@ public class AdminService implements IAdminService{
 
     @Override
     public Admin getAdmin(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // return admin;
+        return null;
     }
 
     @Override
@@ -186,7 +247,7 @@ public class AdminService implements IAdminService{
 
     @Override
     public UserCredential getUser(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return userCredential;
     }
-    
+
 }
