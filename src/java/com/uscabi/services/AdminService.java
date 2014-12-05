@@ -10,6 +10,7 @@ import com.uscabi.commons.Address;
 import com.uscabi.commons.Operator;
 import com.uscabi.commons.UserCredential;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -29,18 +30,7 @@ public class AdminService implements Serializable {
     @EJB
     private IAdminService adminDAO;
 
-    /**
-     * Creates a new instance of AdminService
-     */
-//    @Inject
-//    private AdminDAO adminDAO;
-//    @Inject
-//    private IUserCredentialDAO userDAO;
-//    @Inject
-//    private IOperatorDAO operatorDAO;
     private Operator operator;
-    //private Address address;
-    //private UserCredential user;
 
     private String selectedIncludePath = "/views/admin/operator.xhtml";
 
@@ -63,8 +53,6 @@ public class AdminService implements Serializable {
         this.operator = new Operator();
         operator.setAddress(new Address());
         operator.setUser(new UserCredential());
-        //this.address = new Address();
-        //this.user = new UserCredential();
     }
 
     public String doAddOperator() {
@@ -75,10 +63,10 @@ public class AdminService implements Serializable {
         return "/views/admin/operator.xhtml";
 
     }
-//    public String doAddOperator() {
-//        System.out.println("Testing.......");
-//        return null;
-//    }
+
+    public List<Operator> doFindAllOperator() {
+        return adminDAO.findOperators();
+    }
 
     public String getManageOperator() {
         return manageOperator1;
@@ -119,22 +107,6 @@ public class AdminService implements Serializable {
     public void setOperator(Operator operator) {
         this.operator = operator;
     }
-//
-//    public Address getAddress() {
-//        return address;
-//    }
-//
-//    public void setAddress(Address address) {
-//        this.address = address;
-//    }
-//
-//    public UserCredential getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(UserCredential user) {
-//        this.user = user;
-//    }
 
     public String getSelectedIncludePath() {
         return selectedIncludePath;
@@ -164,13 +136,4 @@ public class AdminService implements Serializable {
         setSelectedIncludePath("/views/admin/driver.xhtml");
         //return getSelectedIncludePath();
     }
-
-//    public void addUser(UserCredential user) {
-//        this.userDAO.create(user);
-//    }
-//
-//    public String postMessage() {
-//        this.userDAO.create(userCredential);
-//        return "theend";
-//    }
 }
