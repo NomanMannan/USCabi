@@ -11,19 +11,17 @@
 
         <script type="text/javascript">
             /**
-             * Bean validator
+             * Faces Validator
              */
-            PrimeFaces.validator['Email'] = {
+            PrimeFaces.validator['custom.emailValidator'] = {
                 pattern: /\S+@\S+/,
-                MESSAGE_ID: 'org.primefaces.examples.validate.email.message',
                 validate: function (element, value) {
-                    var vc = PrimeFaces.util.ValidationContext;
-
+                    //use element.data() to access validation metadata, in this case there is none.
                     if (!this.pattern.test(value)) {
-                        var msgStr = element.data('p-email-msg'),
-                                msg = msgStr ? {summary: msgStr, detail: msgStr} : vc.getMessage(this.MESSAGE_ID);
-
-                        throw msg;
+                        throw {
+                            summary: 'Validation Error',
+                            detail: value + ' is not a valid email.'
+                        }
                     }
                 }
             };
@@ -53,14 +51,13 @@
                     <p:inputMask id="mask2" value="#{adminService.operator.contactNumber}" mask="(999) 999-9999"/>
                     <p:message for="mask2" />
 
-                    <p:outputLabel for="text4" value="Registration Date:" />
-                    <p:calendar id="text4" value="#{adminService.operator.registrationDate}" pattern="dd-MM-yyyy" mask="true" />
-                    <p:message for="text4" />
+                    <h:outputLabel for="email1" value="Email:" />
+                    <p:inputText id="email1" value="#{adminService.operator.email}">
+                        <f:validator validatorId="custom.emailValidator" />
+                    </p:inputText>
+                    <p:message for="email1" display="tooltip" />
+                    <h:outputText value="#{adminService.operator.email}" />
 
-                    <h:outputLabel for="email2" value="Email:" />
-                    <p:inputText id="email2" value="#{adminService.operator.email}" />
-                    <p:message for="email2" display="tooltip" />
-                    <h:outputText value="#{customValidationView.email}" />
 
                     <p:outputLabel for="text6" value="Image:" />
                     <p:inputText id="text6" value="#{adminService.operator.image}" label="Surname"/>
@@ -102,19 +99,6 @@
                     <p:password id="text13" value="#{adminService.operator.user.password}" feedback="true" />
                     <p:message for="text13" />
 
-                    <p:outputLabel for="text14" value="User Type:" />
-                    <h:selectOneMenu id="text14" value="#{adminService.operator.user.usertype}" required="true" label="Operator Type">
-                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-                        <f:selectItem itemLabel="ADMIN" itemValue="ADMIN" />
-                        <f:selectItem itemLabel="OPERATOR" itemValue="OPERATOR" />
-                        <f:selectItem itemLabel="DRIVER" itemValue="DRIVER" />
-                        <f:selectItem itemLabel="CUSTOMER" itemValue="CUSTOMER" />
-
-                    </h:selectOneMenu>
-                    <p:message for="text14" />
-                    <h:outputText value="#{selectorView.text14}" />
-
-
                     <p:outputLabel for="text15" value="Company Name:" />
                     <p:inputText id="text15" value="#{adminService.operator.companyName}" required="true" label="Surname"/>
                     <p:message for="text15" />
@@ -145,9 +129,36 @@
 
             </p:panel>
 
+        </h:form>
 
+        <h:form>
+            <p:dataTable id="operatorlist" var="opr" value="#{adminService.doFindAllOperator()}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                <p:column headerText="Username">
+                    <h:outputText value="#{opr.user.username}" />
+                </p:column>
 
+                <p:column headerText="Person Name">
+                    <h:outputText value="#{opr.lastName}" />
+                </p:column>
 
+                <p:column headerText="Company Name">
+                    <h:outputText value="#{opr.companyName}" />
+                </p:column>
+
+                <p:column headerText="Contact Number">
+                    <h:outputText value="#{opr.contactNumber}" />
+                </p:column>
+
+<!--                <p:column style="width:32px;text-align: center">
+                    <p:commandButton update=":form:operatorDetail" oncomplete="PF('operatorDialog').show()" icon="ui-icon-search" title="View">
+                        <f:setPropertyActionListener value="#{operator}" target="#{dtSelectionView.selectedCar}" />
+                    </p:commandButton>
+                </p:column>-->
+
+            </p:dataTable>
         </h:form>
 
 
