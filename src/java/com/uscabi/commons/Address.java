@@ -18,15 +18,15 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class Address implements Serializable {
 
-    @NotNull
+    
     private String street;
-    @NotNull
+    
     private String city;
-    @NotNull
+    
     private String state;
-    @NotNull
+    
     private String zip;
-    @NotNull
+    
     private String country;
 
     public Address() {

@@ -8,6 +8,7 @@ package com.uscabi.dto.idao;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 
 /**
  *
@@ -42,24 +43,26 @@ public abstract class GenericPersistenceDAO<T, ID extends Serializable> implemen
 
     /**
      *
+     * @param entity
      * @param id
      * @return
      */
     @Override
-    public T find(T id) {
+    public T find(Class<T> entity, ID id) {
         return getEntityManager().find(entityClass, id);
     }
 
     @Override
     public List<T> findAll() {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        CriteriaQuery cq;
+        cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
         return getEntityManager().createQuery(cq).getResultList();
     }
 
     @Override
     public List<T> findRange(int[] range) {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);

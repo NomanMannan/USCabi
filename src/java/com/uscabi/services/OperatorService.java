@@ -16,7 +16,7 @@ import javax.inject.Named;
  *
  * @author noman-pc
  */
-@Named(value = "operatorController")
+@Named
 @RequestScoped
 public class OperatorService implements IOperatorService {
 

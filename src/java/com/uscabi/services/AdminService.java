@@ -6,55 +6,135 @@
 package com.uscabi.services;
 
 import com.uscabi.clientservices.IAdminService;
-import com.uscabi.commons.Admin;
-import com.uscabi.commons.Booking;
-import com.uscabi.commons.Car;
-import com.uscabi.commons.Customer;
-import com.uscabi.commons.Driver;
+import com.uscabi.commons.Address;
 import com.uscabi.commons.Operator;
-import com.uscabi.commons.Payment;
 import com.uscabi.commons.UserCredential;
-import com.uscabi.dto.idao.IUserCredentialDAO;
-import java.util.List;
+import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Named;
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.menu.MenuModel;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 /**
  *
  * @author noman-pc
  */
-@Named
 @ManagedBean
 @RequestScoped
-public class AdminService implements IAdminService {
+public class AdminService implements Serializable {
+
+    @EJB
+    private IAdminService adminDAO;
 
     /**
      * Creates a new instance of AdminService
      */
-    @EJB
-    private IUserCredentialDAO userDAO;
+//    @Inject
+//    private AdminDAO adminDAO;
+//    @Inject
+//    private IUserCredentialDAO userDAO;
+//    @Inject
+//    private IOperatorDAO operatorDAO;
+    private Operator operator;
+    //private Address address;
+    //private UserCredential user;
 
-    private UserCredential userCredential;
+    private String selectedIncludePath = "/views/admin/operator.xhtml";
 
-    private String selectedIncludePath;
-
-    private String manageOperator;
-
-    private String manageCar;
-
-    private String manageCustomer;
-
-    private String manageDriver;
-
-    private MenuModel model;
+    private String manageOperator1;
+//
+//    private String manageCar;
+//
+//    private String manageCustomer;
+//
+//    private String manageDriver;
+//
+//    private MenuModel model;
 
     public AdminService() {
-        this.userCredential = new UserCredential();
+
     }
+
+    @PostConstruct
+    public void init() {
+        this.operator = new Operator();
+        operator.setAddress(new Address());
+        operator.setUser(new UserCredential());
+        //this.address = new Address();
+        //this.user = new UserCredential();
+    }
+
+    public String doAddOperator() {
+
+        adminDAO.addOperator(operator);
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Operator Created", "The Operator of the company " + operator.getCompanyName() + "has been created with id" + operator.getId()));
+        return "/views/admin/operator.xhtml";
+
+    }
+//    public String doAddOperator() {
+//        System.out.println("Testing.......");
+//        return null;
+//    }
+
+    public String getManageOperator() {
+        return manageOperator1;
+    }
+
+    public void setManageOperator(String manageOperator1) {
+        this.manageOperator1 = manageOperator1;
+    }
+//
+//    public String getManageCar() {
+//        return manageCar;
+//    }
+//
+//    public void setManageCar(String manageCar) {
+//        this.manageCar = manageCar;
+//    }
+//
+//    public String getManageCustomer() {
+//        return manageCustomer;
+//    }
+//
+//    public void setManageCustomer(String manageCustomer) {
+//        this.manageCustomer = manageCustomer;
+//    }
+//
+//    public String getManageDriver() {
+//        return manageDriver;
+//    }
+//
+//    public void setManageDriver(String manageDriver) {
+//        this.manageDriver = manageDriver;
+//    }
+
+    public Operator getOperator() {
+        return operator;
+    }
+
+    public void setOperator(Operator operator) {
+        this.operator = operator;
+    }
+//
+//    public Address getAddress() {
+//        return address;
+//    }
+//
+//    public void setAddress(Address address) {
+//        this.address = address;
+//    }
+//
+//    public UserCredential getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(UserCredential user) {
+//        this.user = user;
+//    }
 
     public String getSelectedIncludePath() {
         return selectedIncludePath;
@@ -64,190 +144,33 @@ public class AdminService implements IAdminService {
         this.selectedIncludePath = selectedIncludePath;
     }
 
-    public String manageOperator() {
+    public void manageOperator(ActionEvent e) {
         setSelectedIncludePath("/views/admin/operator.xhtml");
 
-        return getSelectedIncludePath();
+        //return getSelectedIncludePath();
     }
 
-    public String manageCar() {
+    public void manageCar(ActionEvent e) {
         setSelectedIncludePath("/views/admin/car.xhtml");
-        return getSelectedIncludePath();
+        //return getSelectedIncludePath();
     }
 
-    public String manageCustomer() {
+    public void manageCustomer(ActionEvent e) {
         setSelectedIncludePath("/views/admin/customer.xhtml");
-        return getSelectedIncludePath();
+        //return getSelectedIncludePath();
     }
 
-    public String manageDriver() {
+    public void manageDriver(ActionEvent e) {
         setSelectedIncludePath("/views/admin/driver.xhtml");
-        return getSelectedIncludePath();
+        //return getSelectedIncludePath();
     }
 
-    public void addUser(UserCredential user) {
-        this.userDAO.create(user);
-    }
-
-    public String postMessage() {
-        this.userDAO.create(userCredential);
-        return "theend";
-    }
-
-    public UserCredential getUser() {
-        return userCredential;
-    }
-
-    //test end 
-    @Override
-    public void addAdmin(Admin admin) {
-        //this.adminDAO.create(admin);
-    }
-
-    @Override
-    public void addOperator(Operator operator) {
-
-    }
-
-    @Override
-    public void updateOperator(Operator operator) {
-
-    }
-
-    @Override
-    public void disableOperator(Operator operator) {
-
-    }
-
-    @Override
-    public void addCustomer(Customer customer) {
-
-    }
-
-    @Override
-    public void updateCustomer(Customer customer) {
-
-    }
-
-    @Override
-    public void disableCustomer(Customer customer) {
-
-    }
-
-    @Override
-    public void addCar(Car car) {
-
-    }
-
-    @Override
-    public void updateCar(Car car) {
-
-    }
-
-    @Override
-    public void disableCar(Car car) {
-
-    }
-
-    @Override
-    public void addDriver(Driver driver) {
-
-    }
-
-    @Override
-    public void updateDriver(Driver driver) {
-
-    }
-
-    @Override
-    public void disableDriver(Driver driver) {
-
-    }
-
-    @Override
-    public Operator getOperator(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Customer getCustomer(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Car getCar(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Driver getDriver(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Booking getBooking(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Payment getPayment(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Customer> getCustomers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Operator> getOperators() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Car> getCars() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Driver> getDrivers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Booking> getBookings() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Payment> getPayments() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Customer getCustomer(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Operator getOperator(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Admin getAdmin(String username) {
-        // return admin;
-        return null;
-    }
-
-    @Override
-    public Driver getDriver(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public UserCredential getUser(String username) {
-        return userCredential;
-    }
-
+//    public void addUser(UserCredential user) {
+//        this.userDAO.create(user);
+//    }
+//
+//    public String postMessage() {
+//        this.userDAO.create(userCredential);
+//        return "theend";
+//    }
 }

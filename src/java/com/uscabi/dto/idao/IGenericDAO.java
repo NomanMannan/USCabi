@@ -22,7 +22,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 
     public void remove(T entity);
 
-    public T find(T id);
+    public T find(Class<T> entity, ID id);
 
     public List<T> findAll();
 

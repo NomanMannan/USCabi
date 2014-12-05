@@ -9,6 +9,7 @@ package com.uscabi.commons;
  *
  * @author noman-pc
  */
+
 public enum OperatorType{
     KINGSIZE,
     PRIMIUM,

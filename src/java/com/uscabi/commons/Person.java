@@ -21,6 +21,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -42,18 +43,20 @@ public class Person implements Serializable {
     private String lastName;
     @NotNull
     private String contactNumber;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     private Date registrationDate;
     @NotNull
     private String email;
     private byte[] image;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @NotNull
+    @Temporal(TemporalType.DATE)
     private Date dob;
     @Embedded
     private Address address;
     
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "username")
+    @JoinColumn(name = "user_id")
     private UserCredential user;
 
     public Person() {

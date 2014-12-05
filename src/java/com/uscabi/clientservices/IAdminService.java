@@ -21,71 +21,71 @@ import java.util.List;
  */
 public interface IAdminService {
 
-    public void addAdmin(Admin admin);
+    public Admin addAdmin(Admin admin);
     
 
-    public void addOperator(Operator operator);
+    public Operator addOperator(Operator operator);
 
     public void updateOperator(Operator operator);
 
     public void disableOperator(Operator operator);
     
 
-    public void addCustomer(Customer customer);
+    public Customer addCustomer(Customer customer);
 
     public void updateCustomer(Customer customer);
 
     public void disableCustomer(Customer customer);
     
 
-    public void addCar(Car car);
+    public Car addCar(Car car);
 
     public void updateCar(Car car);
 
     public void disableCar(Car car);
     
 
-    public void addDriver(Driver driver);
+    public Driver addDriver(Driver driver);
 
     public void updateDriver(Driver driver);
 
     public void disableDriver(Driver driver);
 
     
-    public Operator getOperator(long id);
+    public Operator findOperator(long id);
 
-    public Customer getCustomer(long id);
+    public Customer findCustomer(long id);
 
-    public Car getCar(long id);
+    public Car findCar(long id);
 
-    public Driver getDriver(long id);
+    public Driver findDriver(long id);
 
-    public Booking getBooking(long id);
+    public Booking findBooking(long id);
 
-    public Payment getPayment(long id);
+    public Payment findPayment(long id);
 
 
-    public List<Customer> getCustomers();
+    public List<Customer> findCustomers();
 
-    public List<Operator> getOperators();
+    public List<Operator> findOperators();
 
-    public List<Car> getCars();
+    public List<Car> findCars();
 
-    public List<Driver> getDrivers();
+    public List<Driver> findDrivers();
 
-    public List<Booking> getBookings();
+    public List<Booking> findBookings();
 
-    public List<Payment> getPayments();
+    public List<Payment> findPayments();
     
 
-    public Customer getCustomer(String username);
+    public Customer findCustomer(String username);
 
-    public Operator getOperator(String username);
+    public Operator findOperator(String username);
 
-    public Admin getAdmin(String username);
+    public Admin findAdmin(String username);
     
-    public Driver getDriver(String username);
+    public Driver findDriver(String username);
 
-    public UserCredential getUser(String username);
+    public UserCredential findUser(String username);
 
 }

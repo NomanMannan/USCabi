@@ -2,33 +2,155 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Operator</title>
     </h:head>
     <h:body>
-        <h:form>
-            <p:dataTable var="car" value="#{dtPaginatorView.cars}" rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
-                <p:column headerText="Id">
-                    <h:outputText value="#{car.id}" />
-                </p:column>
 
-                <p:column headerText="Year">
-                    <h:outputText value="#{car.year}" />
-                </p:column>
+        <script type="text/javascript">
+            /**
+             * Bean validator
+             */
+            PrimeFaces.validator['Email'] = {
+                pattern: /\S+@\S+/,
+                MESSAGE_ID: 'org.primefaces.examples.validate.email.message',
+                validate: function (element, value) {
+                    var vc = PrimeFaces.util.ValidationContext;
 
-                <p:column headerText="Brand">
-                    <h:outputText value="#{car.brand}" />
-                </p:column>
+                    if (!this.pattern.test(value)) {
+                        var msgStr = element.data('p-email-msg'),
+                                msg = msgStr ? {summary: msgStr, detail: msgStr} : vc.getMessage(this.MESSAGE_ID);
 
-                <p:column headerText="Color">
-                    <h:outputText value="#{car.color}" />
-                </p:column>
-            </p:dataTable>
+                        throw msg;
+                    }
+                }
+            };
+        </script>
+
+
+        <h:form id="form">
+            <p:panel id="panel" header="Add Operator" style="margin-bottom:10px;">
+                <p:messages id="messages" />
+
+                <h:panelGrid columns="1" cellpadding="5">
+
+
+                    <p:outputLabel for="firstname" value="First Name:" />
+                    <p:inputText id="firstname" value="#{adminService.operator.firstName}" required="true" label="firstname">
+                        <f:validateLength minimum="2" />
+                    </p:inputText>
+                    <p:message for="firstname" />
+
+                    <p:outputLabel for="lastname" value="Last Name:" />
+                    <p:inputText id="lastname" value="#{adminService.operator.lastName}" required="true" label="lastname">
+                        <f:validateLength minimum="2" />
+                    </p:inputText>
+                    <p:message for="lastname" />
+
+                    <p:outputLabel for="mask2" value="Phone Number:" />
+                    <p:inputMask id="mask2" value="#{adminService.operator.contactNumber}" mask="(999) 999-9999"/>
+                    <p:message for="mask2" />
+
+                    <p:outputLabel for="text4" value="Registration Date:" />
+                    <p:calendar id="text4" value="#{adminService.operator.registrationDate}" pattern="dd-MM-yyyy" mask="true" />
+                    <p:message for="text4" />
+
+                    <h:outputLabel for="email2" value="Email:" />
+                    <p:inputText id="email2" value="#{adminService.operator.email}" />
+                    <p:message for="email2" display="tooltip" />
+                    <h:outputText value="#{customValidationView.email}" />
+
+                    <p:outputLabel for="text6" value="Image:" />
+                    <p:inputText id="text6" value="#{adminService.operator.image}" label="Surname"/>
+                    <p:message for="text6" />
+
+
+                    <p:outputLabel for="text7" value="DOB:" />
+                    <p:calendar id="text7" value="#{adminService.operator.dob}" pattern="dd-MM-yyyy" mask="true" />
+                    <p:message for="text7" />
+
+
+                    <p:outputLabel for="text8" value="Street:" />
+                    <p:inputText id="text8" value="#{adminService.operator.address.street}" required="true" label="Surname"/>
+                    <p:message for="text8" />
+
+
+                    <p:outputLabel for="text9" value="City:" />
+                    <p:inputText id="text9" value="#{adminService.operator.address.city}" required="true" label="Surname"/>
+                    <p:message for="text9" />
+
+
+                    <p:outputLabel for="text10" value="State:" />
+                    <p:inputText id="text10" value="#{adminService.operator.address.state}" required="true" label="Surname"/>
+                    <p:message for="text10" />
+
+                    <p:outputLabel for="text11" value="Zip:" />
+                    <p:inputText id="text11" value="#{adminService.operator.address.zip}" required="true" label="Surname"/>
+                    <p:message for="text11" />
+
+                    <p:outputLabel for="text12" value="Country:" />
+                    <p:inputText id="text12" value="#{adminService.operator.address.country}" required="true" label="Surname"/>
+                    <p:message for="text12" />
+
+                    <p:outputLabel for="mask4" value="Username:" />
+                    <p:inputText id="mask4" value="#{adminService.operator.user.username}" required="true" label="username"/>
+                    <p:message for="mask4" />
+
+                    <p:outputLabel for="text13" value="Password:" />
+                    <p:password id="text13" value="#{adminService.operator.user.password}" feedback="true" />
+                    <p:message for="text13" />
+
+                    <p:outputLabel for="text14" value="User Type:" />
+                    <h:selectOneMenu id="text14" value="#{adminService.operator.user.usertype}" required="true" label="Operator Type">
+                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                        <f:selectItem itemLabel="ADMIN" itemValue="ADMIN" />
+                        <f:selectItem itemLabel="OPERATOR" itemValue="OPERATOR" />
+                        <f:selectItem itemLabel="DRIVER" itemValue="DRIVER" />
+                        <f:selectItem itemLabel="CUSTOMER" itemValue="CUSTOMER" />
+
+                    </h:selectOneMenu>
+                    <p:message for="text14" />
+                    <h:outputText value="#{selectorView.text14}" />
+
+
+                    <p:outputLabel for="text15" value="Company Name:" />
+                    <p:inputText id="text15" value="#{adminService.operator.companyName}" required="true" label="Surname"/>
+                    <p:message for="text15" />
+
+
+                    <p:outputLabel for="text16" value="Operator Type:" />
+                    <h:selectOneMenu id="text16" value="#{adminService.operator.operatorType}" required="true" label="Operator Type">
+                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                        <f:selectItem itemLabel="KINGSIZE" itemValue="KINGSIZE" />
+                        <f:selectItem itemLabel="PRIMIUM" itemValue="PRIMIUM" />
+                        <f:selectItem itemLabel="STANDARD" itemValue="STANDARD" />
+                        <f:selectItem itemLabel="BASIC" itemValue="BASIC" />
+
+                    </h:selectOneMenu>
+                    <p:message for="text16" />
+                    <h:outputText value="#{selectorView.text16}" />
+
+
+                </h:panelGrid>
+                <h:commandButton value="Create a Operator" action="#{adminService.doAddOperator}">
+
+                </h:commandButton>
+
+                <!--                
+                                <p:commandButton value="Create Operator" action="" icon="ui-icon-check" validateClient="true"/>
+                                                <f:ajax execute="@form" render=":operatorlist :errors"/>                    
+                                <p:commandButton value="Reset" ajax="false" icon="ui-icon-check" validateClient="true"/>-->
+
+            </p:panel>
+
+
+
+
         </h:form>
+
+
     </h:body>
 </html>
 
