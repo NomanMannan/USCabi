@@ -47,65 +47,65 @@
                     </p:inputText>
                     <p:message for="lastname" />
 
-                    <p:outputLabel for="mask2" value="Phone Number:" />
-                    <p:inputMask id="mask2" value="#{adminService.operator.contactNumber}" mask="(999) 999-9999"/>
-                    <p:message for="mask2" />
+                    <p:outputLabel for="phonenumber" value="Phone Number:" />
+                    <p:inputMask id="phonenumber" value="#{adminService.operator.contactNumber}" mask="(999) 999-9999"/>
+                    <p:message for="phonenumber" />
 
-                    <h:outputLabel for="email1" value="Email:" />
-                    <p:inputText id="email1" value="#{adminService.operator.email}">
+                    <h:outputLabel for="email" value="Email:" />
+                    <p:inputText id="email" value="#{adminService.operator.email}">
                         <f:validator validatorId="custom.emailValidator" />
                     </p:inputText>
-                    <p:message for="email1" display="tooltip" />
+                    <p:message for="email" display="tooltip" />
                     <h:outputText value="#{adminService.operator.email}" />
 
 
-                    <p:outputLabel for="text6" value="Image:" />
-                    <p:inputText id="text6" value="#{adminService.operator.image}" label="Surname"/>
-                    <p:message for="text6" />
+                    <p:outputLabel for="image" value="Image:" />
+                    <p:inputText id="image" value="#{adminService.operator.image}" label="Image"/>
+                    <p:message for="image" />
 
 
-                    <p:outputLabel for="text7" value="DOB:" />
-                    <p:calendar id="text7" value="#{adminService.operator.dob}" pattern="dd-MM-yyyy" mask="true" />
-                    <p:message for="text7" />
+                    <p:outputLabel for="dob" value="DOB:" />
+                    <p:calendar id="dob" value="#{adminService.operator.dob}" label="DOB" pattern="dd-MM-yyyy" mask="true" />
+                    <p:message for="dob" />
 
 
-                    <p:outputLabel for="text8" value="Street:" />
-                    <p:inputText id="text8" value="#{adminService.operator.address.street}" required="true" label="Surname"/>
-                    <p:message for="text8" />
+                    <p:outputLabel for="street" value="Street:" />
+                    <p:inputText id="street" value="#{adminService.operator.address.street}" required="true" label="Street"/>
+                    <p:message for="street" />
 
 
-                    <p:outputLabel for="text9" value="City:" />
-                    <p:inputText id="text9" value="#{adminService.operator.address.city}" required="true" label="Surname"/>
-                    <p:message for="text9" />
+                    <p:outputLabel for="city" value="City:" />
+                    <p:inputText id="city" value="#{adminService.operator.address.city}" required="true" label="City"/>
+                    <p:message for="city" />
 
 
-                    <p:outputLabel for="text10" value="State:" />
-                    <p:inputText id="text10" value="#{adminService.operator.address.state}" required="true" label="Surname"/>
-                    <p:message for="text10" />
+                    <p:outputLabel for="state" value="State:" />
+                    <p:inputText id="state" value="#{adminService.operator.address.state}" required="true" label="State"/>
+                    <p:message for="state" />
 
-                    <p:outputLabel for="text11" value="Zip:" />
-                    <p:inputText id="text11" value="#{adminService.operator.address.zip}" required="true" label="Surname"/>
-                    <p:message for="text11" />
+                    <p:outputLabel for="zip" value="Zip:" />
+                    <p:inputText id="zip" value="#{adminService.operator.address.zip}" required="true" label="Zip"/>
+                    <p:message for="zip" />
 
-                    <p:outputLabel for="text12" value="Country:" />
-                    <p:inputText id="text12" value="#{adminService.operator.address.country}" required="true" label="Surname"/>
-                    <p:message for="text12" />
+                    <p:outputLabel for="country" value="Country:" />
+                    <p:inputText id="country" value="#{adminService.operator.address.country}" required="true" label="Country"/>
+                    <p:message for="country" />
 
-                    <p:outputLabel for="mask4" value="Username:" />
-                    <p:inputText id="mask4" value="#{adminService.operator.user.username}" required="true" label="username"/>
-                    <p:message for="mask4" />
+                    <p:outputLabel for="username" value="Username:" />
+                    <p:inputText id="username" value="#{adminService.operator.user.username}" required="true" label="Username"/>
+                    <p:message for="username" />
 
-                    <p:outputLabel for="text13" value="Password:" />
-                    <p:password id="text13" value="#{adminService.operator.user.password}" feedback="true" />
-                    <p:message for="text13" />
+                    <p:outputLabel for="password" value="Password:" />
+                    <p:password id="password" value="#{adminService.operator.user.password}" feedback="true" />
+                    <p:message for="password" />
 
-                    <p:outputLabel for="text15" value="Company Name:" />
-                    <p:inputText id="text15" value="#{adminService.operator.companyName}" required="true" label="Surname"/>
-                    <p:message for="text15" />
+                    <p:outputLabel for="companyname" value="Company Name:" />
+                    <p:inputText id="companyname" value="#{adminService.operator.companyName}" required="true" label="Company Name"/>
+                    <p:message for="companyname" />
 
 
-                    <p:outputLabel for="text16" value="Operator Type:" />
-                    <h:selectOneMenu id="text16" value="#{adminService.operator.operatorType}" required="true" label="Operator Type">
+                    <p:outputLabel for="operatortype" value="Operator Type:" />
+                    <h:selectOneMenu id="operatortype" value="#{adminService.operator.operatorType}" required="true" label="Operator Type">
                         <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
                         <f:selectItem itemLabel="KINGSIZE" itemValue="KINGSIZE" />
                         <f:selectItem itemLabel="PRIMIUM" itemValue="PRIMIUM" />
@@ -113,13 +113,12 @@
                         <f:selectItem itemLabel="BASIC" itemValue="BASIC" />
 
                     </h:selectOneMenu>
-                    <p:message for="text16" />
+                    <p:message for="operatortype" />
                     <h:outputText value="#{selectorView.text16}" />
 
 
                 </h:panelGrid>
                 <h:commandButton value="Create a Operator" action="#{adminService.doAddOperator}">
-
                 </h:commandButton>
 
                 <!--                
@@ -151,12 +150,6 @@
                 <p:column headerText="Contact Number">
                     <h:outputText value="#{opr.contactNumber}" />
                 </p:column>
-
-<!--                <p:column style="width:32px;text-align: center">
-                    <p:commandButton update=":form:operatorDetail" oncomplete="PF('operatorDialog').show()" icon="ui-icon-search" title="View">
-                        <f:setPropertyActionListener value="#{operator}" target="#{dtSelectionView.selectedCar}" />
-                    </p:commandButton>
-                </p:column>-->
 
             </p:dataTable>
         </h:form>

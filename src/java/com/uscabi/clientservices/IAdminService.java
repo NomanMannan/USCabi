@@ -87,5 +87,7 @@ public interface IAdminService {
     public Driver findDriver(String username);
 
     public UserCredential findUser(String username);
+    
+    public void sendMail(String recipient, String subject, String message);
 
 }

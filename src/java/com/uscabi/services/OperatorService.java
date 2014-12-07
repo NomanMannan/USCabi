@@ -6,69 +6,105 @@
 package com.uscabi.services;
 
 import com.uscabi.clientservices.IOperatorService;
+import com.uscabi.commons.Address;
 import com.uscabi.commons.Car;
+import com.uscabi.commons.Customer;
 import com.uscabi.commons.Driver;
-import com.uscabi.commons.Operator;
+import com.uscabi.commons.UserCredential;
+import java.io.Serializable;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Named;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author noman-pc
  */
-@Named
+@ManagedBean
 @RequestScoped
-public class OperatorService implements IOperatorService {
+public class OperatorService implements Serializable {
+
+    @EJB
+    private IOperatorService operatorDAO;
+
+    private Driver driver;
+
+    private Car car;
 
     /**
      * Creates a new instance of OperatorService
      */
     public OperatorService() {
     }
+//
+//     public List<Driver> doDriverStatusNotification() {
+//        return operatorDAO.
+//    }
 
-    @Override
-    public void addOperator(Operator operator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @PostConstruct
+    public void init() {
+
+        this.driver = new Driver();
+        driver.setAddress(new Address());
+        driver.setUser(new UserCredential());
+
+        this.car = new Car();
+
+    }
+    
+    public String doAddDriver() {
+
+        operatorDAO.addDriver(driver);
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
+        
+        return "/views/operator/driver.xhtml";
+
     }
 
-    @Override
-    public void updateOperator(Operator operator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Driver> doFindAllDriver() {
+
+        return operatorDAO.findDrivers();
+
     }
 
-    @Override
-    public void disableOperator(Operator operator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String doAddCar() {
+
+        operatorDAO.addCar(car);
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Created", "The Car of the number " + car.getCarNumber() + "has been created with id" + car.getId()));
+
+        return "/views/operator/car.xhtml";
+
     }
 
-    @Override
-    public void addCar(Car car) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Car> doFindAllCar() {
+
+        return operatorDAO.findCars();
+
     }
 
-    @Override
-    public void updateCar(Car car) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Driver getDriver() {
+        return driver;
     }
 
-    @Override
-    public void disableCar(Car car) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
-    @Override
-    public void addDriver(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Car getCar() {
+        return car;
     }
 
-    @Override
-    public void updateDriver(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setCar(Car car) {
+        this.car = car;
     }
+    
+    
 
-    @Override
-    public void disableDriver(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }

@@ -9,17 +9,25 @@ import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
 import com.uscabi.commons.Payment;
 import com.uscabi.commons.UserCredential;
+import com.uscabi.commons.userType;
 import com.uscabi.dto.idao.GenericPersistenceDAO;
 import com.uscabi.dto.idao.IAdminDAO;
+import com.uscabi.dto.idao.IBookingDAO;
+import com.uscabi.dto.idao.ICarDAO;
+import com.uscabi.dto.idao.ICustomerDAO;
+import com.uscabi.dto.idao.IDriverDAO;
 import com.uscabi.dto.idao.IOperatorDAO;
-import com.uscabi.dto.idao.IUserCredentialDAO;
+import com.uscabi.services.util.MailService;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
+import javax.ejb.Schedules;
 import javax.ejb.Stateless;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -38,13 +46,26 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @PersistenceContext(unitName = "USCabiPU")
     private EntityManager em;
-    
+
     @EJB
     private IOperatorDAO operatorDAO;
-   
-    private IUserCredentialDAO userDAO;
-    //private IOperatorDAO operatorDAO;
 
+    @EJB
+    private IDriverDAO driverDAO;
+
+    @EJB
+    private ICustomerDAO customerDAO;
+
+    @EJB
+    private ICarDAO carDAO;
+
+    @EJB
+    private IBookingDAO bookingDAO;
+
+    private Payment payment;
+
+    // private IUserCredentialDAO userDAO;
+    //private IOperatorDAO operatorDAO;
     private UserCredential userCredential;
 
     @Override
@@ -56,6 +77,20 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
         super(Admin.class);
     }
 
+    @Schedules({
+        @Schedule(hour = "0", timezone = "US/Central"),
+        @Schedule(dayOfMonth = "1", hour = "0", timezone = "US/Central")})
+    public void generateReport() {
+
+        List<Booking> allBooking = bookingDAO.findAll();
+        Iterator<Booking> itr = allBooking.iterator();
+        while (itr.hasNext()) {
+            Booking booking = itr.next();
+            payment = booking.getPayment();
+        }
+
+    }
+
     @Override
     public Admin addAdmin(Admin admin) {
         //this.adminDAO.create(admin);
@@ -64,10 +99,13 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Operator addOperator(Operator operator) {
-        //em.persist(operator);
-        
+
+        Date registrationDate = new Date();
+        operator.setRegistrationDate(registrationDate);
+        operator.getUser().setUsertype(userType.OPERATOR);
         operatorDAO.create(operator);
         return operator;
+
     }
 
     @Override
@@ -82,7 +120,11 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Customer addCustomer(Customer customer) {
-        return null;
+        Date registrationDate = new Date();
+        customer.setRegistrationDate(registrationDate);
+        customer.getUser().setUsertype(userType.CUSTOMER);
+        customerDAO.create(customer);
+        return customer;
     }
 
     @Override
@@ -97,7 +139,8 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Car addCar(Car car) {
-        return null;
+        carDAO.create(car);
+        return car;
     }
 
     @Override
@@ -112,7 +155,11 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Driver addDriver(Driver driver) {
-        return null;
+        Date registrationDate = new Date();
+        driver.setRegistrationDate(registrationDate);
+        driver.getUser().setUsertype(userType.DRIVER);
+        driverDAO.create(driver);
+        return driver;
     }
 
     @Override
@@ -132,17 +179,17 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Customer findCustomer(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customerDAO.find(Customer.class, id);
     }
 
     @Override
     public Car findCar(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return carDAO.find(Car.class, id);
     }
 
     @Override
     public Driver findDriver(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return driverDAO.find(Driver.class, id);
     }
 
     @Override
@@ -157,27 +204,27 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public List<Customer> findCustomers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customerDAO.findAll();
     }
 
     @Override
     public List<Operator> findOperators() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return operatorDAO.findAll();
     }
 
     @Override
     public List<Car> findCars() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return carDAO.findAll();
     }
 
     @Override
     public List<Driver> findDrivers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return driverDAO.findAll();
     }
 
     @Override
     public List<Booking> findBookings() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return bookingDAO.findAll();
     }
 
     @Override
@@ -211,4 +258,15 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
         return userCredential;
     }
 
+    @Override
+    @Asynchronous
+    public void sendMail(String recipient, String subject, String message) {
+        String statusMessage = "Message Sent";
+        try {
+            MailService.sendMessage(recipient, subject, message);
+        } catch (MessagingException ex) {
+            statusMessage = ex.getMessage();
+        }
+
+    }
 }
