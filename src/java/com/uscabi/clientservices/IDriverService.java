@@ -7,6 +7,7 @@ package com.uscabi.clientservices;
 
 import com.uscabi.commons.Booking;
 import com.uscabi.commons.Driver;
+import javax.ejb.Remote;
 
 /**
  *

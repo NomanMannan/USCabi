@@ -11,6 +11,6 @@ import com.uscabi.commons.UserCredential;
  *
  * @author noman-pc
  */
-public interface IUserCredentialDAO extends IGenericDAO<UserCredential, Long> {
-        public UserCredential findUser(String username);
+public interface ILoginDAO extends IGenericDAO<UserCredential, Long> {
+
 }

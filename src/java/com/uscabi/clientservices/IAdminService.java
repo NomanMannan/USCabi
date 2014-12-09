@@ -14,6 +14,7 @@ import com.uscabi.commons.Operator;
 import com.uscabi.commons.Payment;
 import com.uscabi.commons.UserCredential;
 import java.util.List;
+import javax.ejb.Remote;
 
 /**
  *

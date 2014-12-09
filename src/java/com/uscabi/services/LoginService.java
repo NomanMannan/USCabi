@@ -9,41 +9,121 @@ package com.uscabi.services;
  *
  * @author noman-pc
  */
+import com.uscabi.clientservices.ILoginService;
 import com.uscabi.commons.UserCredential;
+import java.io.Serializable;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
+import javax.transaction.Transactional;
 
 import org.primefaces.context.RequestContext;
 
 @ManagedBean
-public class LoginService {
-    
-    private UserCredential user;
+@SessionScoped
+@Transactional
+public class LoginService implements Serializable {
 
-    public UserCredential getUser() {
-        return user;
+    @EJB
+    private ILoginService loginDAO;
+
+    //private UserCredential user;
+    private String username;
+    private String password;
+
+    private boolean loggedIn;
+
+    @ManagedProperty(value = "#{navigationService}")
+    private NavigationService navigationService;
+
+    public LoginService() {
     }
 
-    public void setUser(UserCredential user) {
-        this.user = user;
+    @PostConstruct
+    public void init() {
+
     }
 
-    public void login(ActionEvent event) {
+    public String doLogin() {
         RequestContext context = RequestContext.getCurrentInstance();
-        FacesMessage message = null;
-        boolean loggedIn = false;
+        loggedIn = false;
+        UserCredential user = loginDAO.findUser(username, password);
 
-        if (user.getUsername() != null && user.getUsername().equals("admin") && user.getPassword() != null && user.getPassword().equals("admin")) {
+        if (user != null) {
             loggedIn = true;
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", user.getUsername());
-        } else {
-            loggedIn = false;
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
-        }
 
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        context.addCallbackParam("loggedIn", loggedIn);
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username));
+
+            return navigationService.redirectToWelcome(user);
+
+        } else {
+            // Set login ERROR
+            loggedIn = false;
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials"));
+
+
+        }
+       // FacesContext.getCurrentInstance().addMessage(null, message);
+                context.addCallbackParam("loggedIn", loggedIn);
+
+
+        // To to login page
+        return navigationService.toLogin();
     }
+
+    /**
+     * Logout operation.
+     *
+     * @return
+     */
+    public String doLogout() {
+        // Set the paremeter indicating that user is logged in to false
+        loggedIn = false;
+
+        // Set logout message
+        FacesMessage msg = new FacesMessage("Logout success!", "INFO MSG");
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        return navigationService.toLogin();
+    }
+
+    //getters and setters
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public NavigationService getNavigationService() {
+        return navigationService;
+    }
+
+    public void setNavigationService(NavigationService navigationService) {
+        this.navigationService = navigationService;
+    }
+
 }

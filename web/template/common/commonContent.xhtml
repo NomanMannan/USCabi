@@ -12,24 +12,24 @@
 
     <body>
         <ui:composition>
-            <h:form id="login-form">
+<!--            <h:form id="login-form">
 
                 <p:panel id="panel" header="Login" style="margin-bottom:10px;">
                     <p:messages id="messages" />
                     <h:panelGrid columns="3" cellpadding="5">
 
                         <p:outputLabel for="username" value="Username:" />
-                        <p:inputText id="username" value="#{loginService.user.username}" label="username">
+                        <p:inputText id="username" value="#{loginService.username}" label="username">
                         </p:inputText>
                         <p:message for="username" />
 
                         <p:outputLabel for="password" value="Password:" />
-                        <p:inputText id="password" value="#{loginService.user.password}" label="password">
+                        <p:inputText id="password" value="#{loginService.password}" label="password">
                         </p:inputText>
                         <p:message for="password" />
                     </h:panelGrid>
 
-                    <h:commandButton id="button" value="Login" action="#{loginService.login(event)}"/>
+                    <h:commandButton id="button" value="Login" action="#{loginService.doLogin}"/>
                     <br/>
                     <h:commandLink action="#{navigationBean.redirectToInfo}" value="Info page"/>
                     <br/>
@@ -37,7 +37,7 @@
                     <br/>
                 </p:panel>
 
-            </h:form>
+            </h:form>-->
         </ui:composition>
     </body>
 </html>

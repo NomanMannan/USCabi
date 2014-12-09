@@ -6,17 +6,21 @@
 
 #header{
     width: 100%;
-    height:10%;
-    border: 1px solid #000;
+    height:125px;
+    border: 1px solid #FFF;
     margin-bottom:16px;
+    background-color:#EBEBEB;
+    color: #000;
+
 }
 
 .middlepanel{
     width: 100%;
     height:2100px;
+    //margin-top: 40px;
     margin-right:16px;
     margin-bottom:16px;
-    border: 1px solid #FAA;
+    border: 1px solid #F00;
 }
 
 .leftpanel{
@@ -24,9 +28,9 @@
     margin-top: 2%;
     margin-bottom: 2%;
     margin-left: 1%;
-    width: 18%;
+    width: 16%;
     height:auto;
-    border: 1px solid #000;
+    border: 1px solid #D00;
 }
 
 .content{
@@ -36,12 +40,12 @@
     margin-left: 2%;
     width: 78%;
     height:auto;
-    border: 1px solid #000;
+    border: 1px solid #C00;
 }
 
 #footer{
     width: 100%;
     margin: auto;
     height:10%;
-    border: 1px solid #000;
+    border: 1px solid #B00;
 }

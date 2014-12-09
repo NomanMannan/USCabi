@@ -11,6 +11,7 @@ import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
 import com.uscabi.commons.Payment;
 import java.util.List;
+import javax.ejb.Remote;
 
 /**
  *

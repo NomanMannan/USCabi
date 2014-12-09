@@ -20,6 +20,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.interceptor.Interceptor;
@@ -31,7 +32,7 @@ import javax.transaction.Transactional;
  * @author noman-pc
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 @Transactional
 public class AdminService implements Serializable {
 
@@ -47,18 +48,16 @@ public class AdminService implements Serializable {
     private Car car;
 
     private String selectedIncludePath;
-    //= "/views/admin/operator.xhtml";
 
-    private String manageOperator1;
-
-    private String manageCar;
-
-    private String manageCustomer;
-
-    private String manageDriver;
-    
+//    private String manageOperator1;
+//
+//    private String manageCar;
+//
+//    private String manageCustomer;
+//
+//    private String manageDriver;
     private String emailSubject;
-    
+
     private String emailMessage;
 //
 //    private MenuModel model;
@@ -70,8 +69,8 @@ public class AdminService implements Serializable {
     @PostConstruct
     public void init() {
         //this.selectedIncludePath = "/views/admin/operator.xhtml";
-        this.emailSubject="USCabi Account Activation Link";
-        this.emailMessage="Your account has been created successfully";
+        this.emailSubject = "USCabi Account Activation Link";
+        this.emailMessage = "Your account has been created successfully";
 
         this.operator = new Operator();
         operator.setAddress(new Address());
@@ -89,16 +88,16 @@ public class AdminService implements Serializable {
 
     }
 
-    // @Interceptors(LoggingAOP.class)
+    //@Interceptors(LoggingAOP.class)
     public String doAddOperator() {
 
         adminDAO.addOperator(operator);
+        adminDAO.sendMail(operator.getEmail(), emailSubject, emailMessage);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Operator Created", "The Operator of the company " + operator.getCompanyName() + "has been created with id" + operator.getId()));
         setSelectedIncludePath("/views/admin/operator.xhtml");
 
-        return getSelectedIncludePath();
-
+        return "/template/admin/adminLayout.xhtml";
     }
 
     public List<Operator> doFindAllOperator() {
@@ -108,11 +107,11 @@ public class AdminService implements Serializable {
     public String doAddDriver() {
 
         adminDAO.addDriver(driver);
+        adminDAO.sendMail(driver.getEmail(), emailSubject, emailMessage);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
         setSelectedIncludePath("/views/admin/driver.xhtml");
-        return getSelectedIncludePath();
-
+        return "/template/admin/adminLayout.xhtml";
     }
 
     public List<Driver> doFindAllDriver() {
@@ -128,8 +127,7 @@ public class AdminService implements Serializable {
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Created", "The Customer of the name " + customer.getLastName() + "has been created with id" + customer.getId()));
         setSelectedIncludePath("/views/admin/customer.xhtml");
-        return getSelectedIncludePath();
-
+        return "/template/admin/adminLayout.xhtml";
     }
 
     public List<Customer> doFindAllCustomer() {
@@ -143,10 +141,8 @@ public class AdminService implements Serializable {
         adminDAO.addCar(car);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Created", "The Car of the number " + car.getCarNumber() + "has been created with id" + car.getId()));
-        //setSelectedIncludePath("/views/admin/car.xhtml");
-
-        return getSelectedIncludePath();
-
+        setSelectedIncludePath("/views/admin/car.xhtml");
+        return "/template/admin/adminLayout.xhtml";
     }
 
     public List<Car> doFindAllCar() {
@@ -155,14 +151,13 @@ public class AdminService implements Serializable {
 
     }
 
-    public String getManageOperator() {
-        return manageOperator1;
-    }
-
-    public void setManageOperator(String manageOperator1) {
-        this.manageOperator1 = manageOperator1;
-    }
-
+//    public String getManageOperator() {
+//        return manageOperator1;
+//    }
+//
+//    public void setManageOperator(String manageOperator1) {
+//        this.manageOperator1 = manageOperator1;
+//    }
 //
 //    public String getManageCar() {
 //        return manageCar;
@@ -229,22 +224,17 @@ public class AdminService implements Serializable {
 
     public void manageOperator(ActionEvent e) {
         setSelectedIncludePath("/views/admin/operator.xhtml");
-
-        //return getSelectedIncludePath();
     }
 
     public void manageCar(ActionEvent e) {
         setSelectedIncludePath("/views/admin/car.xhtml");
-        //return getSelectedIncludePath();
     }
 
     public void manageCustomer(ActionEvent e) {
         setSelectedIncludePath("/views/admin/customer.xhtml");
-        //return getSelectedIncludePath();
     }
 
     public void manageDriver(ActionEvent e) {
         setSelectedIncludePath("/views/admin/driver.xhtml");
-        //return getSelectedIncludePath();
     }
 }

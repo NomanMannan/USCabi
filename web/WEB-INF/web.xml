@@ -13,7 +13,19 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-  
+    
+    <!-- Login filter -->
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>com.uscabi.services.util.LoginFilter</filter-class>
+    </filter>
+
+    <!-- Set the login filter to secure all the pages in the /secured/* path of the application  -->
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/template/*</url-pattern>
+    </filter-mapping>
+
     <!-- Welcome page -->
     <welcome-file-list>
         <welcome-file>faces/default.xhtml</welcome-file>
@@ -48,5 +60,9 @@
         <param-name>facelets.SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
+    <context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
   
 </web-app>

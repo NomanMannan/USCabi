@@ -18,14 +18,16 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 /**
  *
  * @author noman-pc
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class OperatorService implements Serializable {
 
     @EJB
@@ -34,6 +36,8 @@ public class OperatorService implements Serializable {
     private Driver driver;
 
     private Car car;
+
+    private String selectedIncludePath;
 
     /**
      * Creates a new instance of OperatorService
@@ -55,14 +59,15 @@ public class OperatorService implements Serializable {
         this.car = new Car();
 
     }
-    
+
     public String doAddDriver() {
 
         operatorDAO.addDriver(driver);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
-        
-        return "/views/operator/driver.xhtml";
+
+        setSelectedIncludePath("/views/operator/driver.xhtml");
+        return "/template/operator/operatorLayout.xhtml";
 
     }
 
@@ -77,8 +82,8 @@ public class OperatorService implements Serializable {
         operatorDAO.addCar(car);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Created", "The Car of the number " + car.getCarNumber() + "has been created with id" + car.getId()));
-
-        return "/views/operator/car.xhtml";
+        setSelectedIncludePath("/views/operator/car.xhtml");
+        return "/template/operator/operatorLayout.xhtml";
 
     }
 
@@ -103,8 +108,21 @@ public class OperatorService implements Serializable {
     public void setCar(Car car) {
         this.car = car;
     }
-    
-    
 
+    public String getSelectedIncludePath() {
+        return selectedIncludePath;
+    }
+
+    public void setSelectedIncludePath(String selectedIncludePath) {
+        this.selectedIncludePath = selectedIncludePath;
+    }
+
+    public void manageCar(ActionEvent e) {
+        setSelectedIncludePath("/views/operator/car.xhtml");
+    }
+
+    public void manageDriver(ActionEvent e) {
+        setSelectedIncludePath("/views/operator/driver.xhtml");
+    }
 
 }

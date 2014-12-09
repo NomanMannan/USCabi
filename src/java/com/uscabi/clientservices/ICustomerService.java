@@ -7,6 +7,7 @@ package com.uscabi.clientservices;
 
 import com.uscabi.commons.Car;
 import com.uscabi.commons.Customer;
+import javax.ejb.Remote;
 
 /**
  *

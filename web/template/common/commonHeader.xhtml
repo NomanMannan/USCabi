@@ -10,69 +10,11 @@
     <body>
         <ui:composition>
 
-            <h1>This is default header</h1>
-            <!--            Registration Form-->
-            <h:form>            
-                <h:outputLink value="javascript:void(0)" onclick="PF('dlg').show();" title="login">
-                    <p:graphicImage name="/images/signup.png" />
-                </h:outputLink>
-
-                <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
-
-                <p:dialog header="Login" widgetVar="dlg" resizable="false">
-                    <h:panelGrid columns="2" cellpadding="5">
-                        <h:outputLabel for="username" value="Username:" />
-                        <p:inputText id="username" value="#{loginService.user.username}" required="true" label="username" />
-
-                        <h:outputLabel for="password" value="Password:" />
-                        <p:password id="password" value="#{loginService.user.password}" required="true" label="password" />
-
-                        <f:facet name="footer">
-                            <p:commandButton value="Login" update="growl" actionListener="#{loginService.login}"
-                                             oncomplete="handleLoginRequest(xhr, status, args)" />
-                        </f:facet>  
-                    </h:panelGrid>
-                </p:dialog>
+            <h1>USCabi</h1>
+            <h:form style="float: right">
+                <p:growl id="growl" life="2000" />
+                <p:commandButton value="Logout" id="button" update="growl" action="#{loginService.doLogout}"/>
             </h:form>
-
-            <!--Login Form-->
-            <h:form>            
-                <h:outputLink value="javascript:void(0)" onclick="PF('dlg').show();" title="login">
-                    <p:graphicImage name="/images/login.png" />
-                </h:outputLink>
-
-                <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
-
-                <p:dialog header="Login" widgetVar="dlg" resizable="false">
-                    <h:panelGrid columns="2" cellpadding="5">
-                        <h:outputLabel for="username" value="Username:" />
-                        <p:inputText id="username" value="#{loginService.user.username}" required="true" label="username" />
-
-                        <h:outputLabel for="password" value="Password:" />
-                        <p:password id="password" value="#{loginService.user.password}" required="true" label="password" />
-
-                        <f:facet name="footer">
-                            <p:commandButton value="Login" update="growl" actionListener="#{loginService.login}"
-                                             oncomplete="handleLoginRequest(xhr, status, args)" />
-                        </f:facet>  
-                    </h:panelGrid>
-                </p:dialog>
-            </h:form>
-
-            <script type="text/javascript">
-                function handleLoginRequest(xhr, status, args) {
-                    if (args.validationFailed || !args.loggedIn) {
-                        PF('dlg').jq.effect("shake", {times: 5}, 100);
-                    }
-                    else {
-                        PF('dlg').hide();
-                        $('#loginLink').fadeOut();
-                    }
-                }
-            </script>
-
-
-
 
         </ui:composition>
     </body>

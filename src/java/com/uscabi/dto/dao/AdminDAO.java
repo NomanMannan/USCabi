@@ -21,10 +21,13 @@ import com.uscabi.services.util.MailService;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Schedules;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 import javax.mail.MessagingException;
@@ -42,10 +45,14 @@ import javax.persistence.PersistenceContext;
  */
 @Named
 @Stateless
+//@RolesAllowed({"ADMIN"})
 public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdminDAO, IAdminService {
 
     @PersistenceContext(unitName = "USCabiPU")
     private EntityManager em;
+
+    @Resource
+    private SessionContext context;
 
     @EJB
     private IOperatorDAO operatorDAO;
@@ -99,13 +106,15 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Operator addOperator(Operator operator) {
-
-        Date registrationDate = new Date();
-        operator.setRegistrationDate(registrationDate);
-        operator.getUser().setUsertype(userType.OPERATOR);
-        operatorDAO.create(operator);
-        return operator;
-
+//        if (!context.isCallerInRole("ADMIN")) {
+//            throw new SecurityException("Only Admin can create Operator!!!");
+//        } else {
+            Date registrationDate = new Date();
+            operator.setRegistrationDate(registrationDate);
+            operator.getUser().setUsertype(userType.OPERATOR);
+            operatorDAO.create(operator);
+            return operator;
+        //}
     }
 
     @Override
