@@ -62,20 +62,20 @@ public class NavigationService implements Serializable {
      */
     public String redirectToWelcome(UserCredential user) {
         if (user.getUsertype().equals(userType.ADMIN)) {
-            return "/template/admin/adminLayout.xhtml?faces-redirect=true";
+            return "/secure/admin/home.xhtml?faces-redirect=true";
 
         } else if (user.getUsertype().equals(userType.CUSTOMER)) {
-            return "/template/customer/customerLayout.xhtml?faces-redirect=true";
+            return "/secure/customer/home.xhtml?faces-redirect=true";
 
         } else if (user.getUsertype().equals(userType.DRIVER)) {
-            return "/template/driver/driverLayout.xhtml?faces-redirect=true";
+            return "/secure/driver/home.xhtml?faces-redirect=true";
 
         } else if (user.getUsertype().equals(userType.OPERATOR)) {
-            return "/template/operator/operatorLayout.xhtml?faces-redirect=true";
+            return "/secure/operator/home.xhtml?faces-redirect=true";
 
         }
 
-        return "/template/customer/customerLayout.xhtml?faces-redirect=true";
+        return "/secure/customer/home.xhtml?faces-redirect=true";
     }
 
     /**

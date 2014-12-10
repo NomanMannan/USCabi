@@ -112,6 +112,7 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
             Date registrationDate = new Date();
             operator.setRegistrationDate(registrationDate);
             operator.getUser().setUsertype(userType.OPERATOR);
+            operator.setCompanyName("USCabi");
             operatorDAO.create(operator);
             return operator;
         //}

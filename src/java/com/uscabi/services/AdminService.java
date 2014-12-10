@@ -48,19 +48,13 @@ public class AdminService implements Serializable {
     private Car car;
 
     private String selectedIncludePath;
+    
+    private List<Operator> operatorList;
 
-//    private String manageOperator1;
-//
-//    private String manageCar;
-//
-//    private String manageCustomer;
-//
-//    private String manageDriver;
     private String emailSubject;
 
     private String emailMessage;
-//
-//    private MenuModel model;
+
 
     public AdminService() {
 
@@ -85,6 +79,8 @@ public class AdminService implements Serializable {
         customer.setUser(new UserCredential());
 
         this.car = new Car();
+        
+        this.operatorList= adminDAO.findOperators();
 
     }
 
@@ -97,7 +93,7 @@ public class AdminService implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Operator Created", "The Operator of the company " + operator.getCompanyName() + "has been created with id" + operator.getId()));
         setSelectedIncludePath("/views/admin/operator.xhtml");
 
-        return "/template/admin/adminLayout.xhtml";
+        return "/secure/admin/home.xhtml";
     }
 
     public List<Operator> doFindAllOperator() {
@@ -111,7 +107,7 @@ public class AdminService implements Serializable {
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
         setSelectedIncludePath("/views/admin/driver.xhtml");
-        return "/template/admin/adminLayout.xhtml";
+        return "/secure/admin/home.xhtml";
     }
 
     public List<Driver> doFindAllDriver() {
@@ -127,7 +123,7 @@ public class AdminService implements Serializable {
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Created", "The Customer of the name " + customer.getLastName() + "has been created with id" + customer.getId()));
         setSelectedIncludePath("/views/admin/customer.xhtml");
-        return "/template/admin/adminLayout.xhtml";
+        return "/secure/admin/home.xhtml";
     }
 
     public List<Customer> doFindAllCustomer() {
@@ -142,7 +138,7 @@ public class AdminService implements Serializable {
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Created", "The Car of the number " + car.getCarNumber() + "has been created with id" + car.getId()));
         setSelectedIncludePath("/views/admin/car.xhtml");
-        return "/template/admin/adminLayout.xhtml";
+        return "/secure/admin/home.xhtml";
     }
 
     public List<Car> doFindAllCar() {
@@ -151,37 +147,6 @@ public class AdminService implements Serializable {
 
     }
 
-//    public String getManageOperator() {
-//        return manageOperator1;
-//    }
-//
-//    public void setManageOperator(String manageOperator1) {
-//        this.manageOperator1 = manageOperator1;
-//    }
-//
-//    public String getManageCar() {
-//        return manageCar;
-//    }
-//
-//    public void setManageCar(String manageCar) {
-//        this.manageCar = manageCar;
-//    }
-//
-//    public String getManageCustomer() {
-//        return manageCustomer;
-//    }
-//
-//    public void setManageCustomer(String manageCustomer) {
-//        this.manageCustomer = manageCustomer;
-//    }
-//
-//    public String getManageDriver() {
-//        return manageDriver;
-//    }
-//
-//    public void setManageDriver(String manageDriver) {
-//        this.manageDriver = manageDriver;
-//    }
     public Operator getOperator() {
         return operator;
     }
@@ -220,6 +185,14 @@ public class AdminService implements Serializable {
 
     public void setSelectedIncludePath(String selectedIncludePath) {
         this.selectedIncludePath = selectedIncludePath;
+    }
+
+    public List<Operator> getOperatorList() {
+        return operatorList;
+    }
+
+    public void setOperatorList(List<Operator> operatorList) {
+        this.operatorList = operatorList;
     }
 
     public void manageOperator(ActionEvent e) {

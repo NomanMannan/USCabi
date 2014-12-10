@@ -32,7 +32,7 @@
             <p:panel id="panel" header="Add Operator" style="margin-bottom:10px;">
                 <p:messages id="messages" />
 
-                <h:panelGrid columns="1" cellpadding="5">
+                <h:panelGrid columns="1" cellpadding="7">
 
 
                     <p:outputLabel for="firstname" value="First Name:" />
@@ -98,11 +98,6 @@
                     <p:outputLabel for="password" value="Password:" />
                     <p:password id="password" value="#{adminService.operator.user.password}" feedback="true" />
                     <p:message for="password" />
-
-                    <p:outputLabel for="companyname" value="Company Name:" />
-                    <p:inputText id="companyname" value="#{adminService.operator.companyName}" required="true" label="Company Name"/>
-                    <p:message for="companyname" />
-
 
                     <p:outputLabel for="operatortype" value="Operator Type:" />
                     <h:selectOneMenu id="operatortype" value="#{adminService.operator.operatorType}" required="true" label="Operator Type">
