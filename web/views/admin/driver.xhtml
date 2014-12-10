@@ -143,11 +143,12 @@
                         <f:validateLength minimum="5" />
                     </p:inputText>
                     <p:message for="driverStatus" />
-<!--                  
-                    <p:selectOneMenu id="operator" value="#{adminService.driver.operator}" converter="#{operatorConverter}" style="width:200px">
+                    
+                  
+                    <p:selectOneMenu id="operator" value="#{adminService.operatorId}" style="width:200px">
                         <f:selectItem itemLabel="Select Operator" itemValue="" noSelectionOption="true" />
-                        <f:selectItems value="#{adminService.operatorList}" var="operator" itemValue="#{operator}" itemLabel="#{operator.user.username}"/>
-                    </p:selectOneMenu>-->
+                        <f:selectItems value="#{adminService.operatorList}" var="operator" itemValue="#{operator.id}" itemLabel="#{operator.user.username}"/>
+                    </p:selectOneMenu>
 
                 </h:panelGrid>
                 <h:commandButton value="Create a Driver" action="#{adminService.doAddDriver}">

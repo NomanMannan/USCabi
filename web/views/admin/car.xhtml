@@ -78,7 +78,13 @@
 
                     <p:outputLabel for="text14" value="Price:" />
                     <p:inputText id="text14" value="#{adminService.car.price}" required="true" label="Surname"/>
-                    <p:message for="text14" />                   
+                    <p:message for="text14" />  
+                    
+                    
+                    <p:selectOneMenu id="operator" value="#{adminService.driverId}" style="width:200px">
+                        <f:selectItem itemLabel="Select Driver" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{adminService.driverList}" var="driver" itemValue="#{driver.id}" itemLabel="#{driver.user.username}"/>
+                    </p:selectOneMenu>
 
                 </h:panelGrid>
                 

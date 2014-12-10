@@ -109,12 +109,12 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 //        if (!context.isCallerInRole("ADMIN")) {
 //            throw new SecurityException("Only Admin can create Operator!!!");
 //        } else {
-            Date registrationDate = new Date();
-            operator.setRegistrationDate(registrationDate);
-            operator.getUser().setUsertype(userType.OPERATOR);
-            operator.setCompanyName("USCabi");
-            operatorDAO.create(operator);
-            return operator;
+        Date registrationDate = new Date();
+        operator.setRegistrationDate(registrationDate);
+        operator.getUser().setUsertype(userType.OPERATOR);
+        operator.setCompanyName("USCabi");
+        operatorDAO.create(operator);
+        return operator;
         //}
     }
 
@@ -148,8 +148,9 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     }
 
     @Override
-    public Car addCar(Car car) {
+    public Car addCar(Car car, Driver driver) {
         carDAO.create(car);
+        car.setDriver(driver);
         return car;
     }
 
@@ -164,11 +165,13 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     }
 
     @Override
-    public Driver addDriver(Driver driver) {
+    public Driver addDriver(Driver driver, Operator operator) {
         Date registrationDate = new Date();
         driver.setRegistrationDate(registrationDate);
         driver.getUser().setUsertype(userType.DRIVER);
         driverDAO.create(driver);
+        driver.setOperator(operator);
+
         return driver;
     }
 

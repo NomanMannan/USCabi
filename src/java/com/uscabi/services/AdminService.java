@@ -49,7 +49,13 @@ public class AdminService implements Serializable {
 
     private String selectedIncludePath;
     
+    private Long operatorId;
+    
     private List<Operator> operatorList;
+    
+    private Long driverId;
+    
+    private List<Driver> driverList;
 
     private String emailSubject;
 
@@ -73,14 +79,17 @@ public class AdminService implements Serializable {
         this.driver = new Driver();
         driver.setAddress(new Address());
         driver.setUser(new UserCredential());
+        driver.setOperator(new Operator());
 
         this.customer = new Customer();
         customer.setAddress(new Address());
         customer.setUser(new UserCredential());
 
         this.car = new Car();
+        car.setDriver(new Driver());
         
         this.operatorList= adminDAO.findOperators();
+        this.driverList=adminDAO.findDrivers();
 
     }
 
@@ -101,8 +110,9 @@ public class AdminService implements Serializable {
     }
 
     public String doAddDriver() {
+        operator=adminDAO.findOperator(operatorId);
 
-        adminDAO.addDriver(driver);
+        adminDAO.addDriver(driver, operator);
         adminDAO.sendMail(driver.getEmail(), emailSubject, emailMessage);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
@@ -133,8 +143,9 @@ public class AdminService implements Serializable {
     }
 
     public String doAddCar() {
-
-        adminDAO.addCar(car);
+          driver=adminDAO.findDriver(driverId);
+        
+        adminDAO.addCar(car, driver);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Created", "The Car of the number " + car.getCarNumber() + "has been created with id" + car.getId()));
         setSelectedIncludePath("/views/admin/car.xhtml");
@@ -187,6 +198,15 @@ public class AdminService implements Serializable {
         this.selectedIncludePath = selectedIncludePath;
     }
 
+    public Long getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(Long operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    
     public List<Operator> getOperatorList() {
         return operatorList;
     }
@@ -194,6 +214,23 @@ public class AdminService implements Serializable {
     public void setOperatorList(List<Operator> operatorList) {
         this.operatorList = operatorList;
     }
+
+    public Long getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Long driverId) {
+        this.driverId = driverId;
+    }
+
+    public List<Driver> getDriverList() {
+        return driverList;
+    }
+
+    public void setDriverList(List<Driver> driverList) {
+        this.driverList = driverList;
+    }
+    
 
     public void manageOperator(ActionEvent e) {
         setSelectedIncludePath("/views/admin/operator.xhtml");

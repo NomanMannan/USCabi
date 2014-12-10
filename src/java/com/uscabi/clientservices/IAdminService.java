@@ -39,14 +39,14 @@ public interface IAdminService {
     public void disableCustomer(Customer customer);
     
 
-    public Car addCar(Car car);
+    public Car addCar(Car car, Driver driver);
 
     public void updateCar(Car car);
 
     public void disableCar(Car car);
     
 
-    public Driver addDriver(Driver driver);
+    public Driver addDriver(Driver driver, Operator operator);
 
     public void updateDriver(Driver driver);
 
