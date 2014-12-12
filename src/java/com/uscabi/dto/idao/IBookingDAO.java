@@ -6,10 +6,14 @@
 package com.uscabi.dto.idao;
 
 import com.uscabi.commons.Booking;
+import java.util.List;
 
 /**
  *
  * @author noman-pc
  */
 public interface IBookingDAO extends IGenericDAO<Booking, Long> {
+        
+    public List<Booking> findAllBookingByOperator(String operatorUserName);
+
 }

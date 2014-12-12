@@ -23,13 +23,13 @@ public interface IOperatorService {
 
     public void disableOperator(Operator operator);
 
-    public Car addCar(Car car);
+    public Car addCar(Car car, Driver driver);
 
     public void updateCar(Car car);
 
     public void disableCar(Car car);
 
-    public Driver addDriver(Driver driver);
+    public Driver addDriver(Driver driver, String operatorUserName);
 
     public void updateDriver(Driver driver);
 
@@ -42,14 +42,14 @@ public interface IOperatorService {
     public Booking findBooking(long id);
 
     public Payment findPayment(long id);
+    
+    public List<Car> findCars(String operatorUserName);
 
-    public List<Car> findCars();
+    public List<Driver> findDrivers(String operatorUserName);
 
-    public List<Driver> findDrivers();
+    public List<Booking> findBookings(String operatorUserName);
 
-    public List<Booking> findBookings();
-
-    public List<Payment> findPayments();
+    public List<Payment> findPayments(String operatorUserName);
 
     public Driver findDriver(String username);
 

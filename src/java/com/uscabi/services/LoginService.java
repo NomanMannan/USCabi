@@ -56,7 +56,6 @@ public class LoginService implements Serializable {
         if (user != null) {
             loggedIn = true;
 
-
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username));
 
             return navigationService.redirectToWelcome(user);

@@ -6,13 +6,12 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Car</title>
+        
     </h:head>
     <h:body>
 
         <h:form id="form">
-            <p:panel id="panel">
-                <h3 style="background-color: #f5f5f5; padding: 5px 0px 8px 2px; margin-top: 0px;">Add Car</h3>
-
+            <p:panel id="panel" header="Add Car" style="margin-bottom:10px;">
                 <p:messages id="messages" />
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="text1" value="MOT Certificate No:" />
@@ -80,27 +79,10 @@
 
                     <p:outputLabel for="text14" value="Price:" />
                     <p:inputText id="text14" value="#{adminService.car.price}" required="true" label="Surname"/>
-                    <p:message for="text14" />  
-                    
-                    
-                    <p:outputLabel for="cartype" value="Car Type:" />
-                    <h:selectOneMenu id="cartype" value="#{adminService.car.carType}" required="true" label="Car Type">
-                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-                        <f:selectItem itemLabel="SUV" itemValue="SUV" />
-                        <f:selectItem itemLabel="TAXICAB" itemValue="TAXICAB" />
-                        <f:selectItem itemLabel="MINICAB" itemValue="MINICAB" />
-
-                    </h:selectOneMenu>
-                    <p:message for="cartype" />
-
-
-                    <p:selectOneMenu id="operator" value="#{adminService.driverId}" style="width:200px">
-                        <f:selectItem itemLabel="Select Driver" itemValue="" noSelectionOption="true" />
-                        <f:selectItems value="#{adminService.driverList}" var="driver" itemValue="#{driver.id}" itemLabel="#{driver.user.username}"/>
-                    </p:selectOneMenu>
+                    <p:message for="text14" />                   
 
                 </h:panelGrid>
-
+                
                 <h:commandButton value="Create a Car" action="#{adminService.doAddCar}">
                 </h:commandButton>
 

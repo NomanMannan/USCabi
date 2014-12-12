@@ -8,6 +8,7 @@ package com.uscabi.services;
 import com.uscabi.clientservices.IDriverService;
 import com.uscabi.commons.Booking;
 import com.uscabi.commons.Driver;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -17,42 +18,12 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class DriverService implements IDriverService{
+public class DriverService implements Serializable{
 
     /**
      * Creates a new instance of DriverService
      */
     public DriverService() {
-    }
-
-    @Override
-    public void addDriver(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateDriver(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void disableDriver(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void acceptBooking(Driver driver, Booking booking) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void rejectBooking(Driver driver, Booking booking) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateLocation(Driver driver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

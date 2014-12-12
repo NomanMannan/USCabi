@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import static javax.persistence.FetchType.LAZY;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -60,6 +62,9 @@ public class Car implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date carLinenseRenewalDate;
     private double price;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private carType carType;
 
     @OneToMany(mappedBy = "car")
     private List<Booking> bookings;
@@ -88,7 +93,6 @@ public class Car implements Serializable {
         this.price = price;
     }
 
-    
     public Long getId() {
         return id;
     }
@@ -208,8 +212,14 @@ public class Car implements Serializable {
     public void setPrice(double price) {
         this.price = price;
     }
-    
-    
+
+    public carType getCarType() {
+        return carType;
+    }
+
+    public void setCarType(carType carType) {
+        this.carType = carType;
+    }
 
     public List<Booking> getBookings() {
         return bookings;

@@ -3,7 +3,8 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
 
     <h:head>
         <h:outputStylesheet name="common-style.css" library="css" />
@@ -13,11 +14,11 @@
         <ui:composition template="/secure/common/commonLayout.xhtml">
 
             <ui:define name="leftpanel">
-                <ui:include src="/secure/admin/adminLeftPanel.xhtml" />
+                <ui:include src="/secure/customer/customerLeftPanel.xhtml" />
             </ui:define>
 
             <ui:define name="content">
-                <ui:include src="#{adminService.selectedIncludePath}" />
+                <ui:include src="#{CustomerService.selectedIncludePath}" />
             </ui:define>
 
 

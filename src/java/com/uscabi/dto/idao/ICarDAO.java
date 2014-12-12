@@ -6,11 +6,15 @@
 package com.uscabi.dto.idao;
 
 import com.uscabi.commons.Car;
+import com.uscabi.commons.Operator;
+import java.util.List;
 
 /**
  *
  * @author noman-pc
  */
 public interface ICarDAO extends IGenericDAO<Car, Long> {
+
+    public List<Car> findAllCarByOperator(String operatorUserName);
 
 }

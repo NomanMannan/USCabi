@@ -6,11 +6,14 @@
 package com.uscabi.dto.idao;
 
 import com.uscabi.commons.Payment;
+import java.util.List;
 
 /**
  *
  * @author noman-pc
  */
 public interface IPaymentDAO extends IGenericDAO<Payment, Long> {
-
+    
+        public List<Payment> findAllPaymentByOperator(String operatorUserName);
+        
 }

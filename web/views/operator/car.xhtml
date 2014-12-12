@@ -10,7 +10,9 @@
     <h:body>
 
         <h:form id="form">
-            <p:panel id="panel" header="Add Car" style="margin-bottom:10px;">
+            <p:panel id="panel">
+                <h3 style="background-color: #f5f5f5; padding: 5px 0px 8px 2px; margin-top: 0px;">Add Car</h3>
+
                 <p:messages id="messages" />
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="text1" value="MOT Certificate No:" />
@@ -78,10 +80,28 @@
 
                     <p:outputLabel for="text14" value="Price:" />
                     <p:inputText id="text14" value="#{operatorService.car.price}" required="true" label="Surname"/>
-                    <p:message for="text14" />                   
+                    <p:message for="text14" />
+                    
+                    
+                    <p:outputLabel for="cartype" value="Car Type:" />
+                    <h:selectOneMenu id="cartype" value="#{operatorService.car.carType}" required="true" label="Car Type">
+                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                        <f:selectItem itemLabel="SUV" itemValue="SUV" />
+                        <f:selectItem itemLabel="TAXICAB" itemValue="TAXICAB" />
+                        <f:selectItem itemLabel="MINICAB" itemValue="MINICAB" />
+
+                    </h:selectOneMenu>
+                    <p:message for="cartype" />
+
+
+                    <p:selectOneMenu id="operator" value="#{operatorService.driverId}" style="width:200px">
+                        <f:selectItem itemLabel="Select Driver" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{operatorService.driverList}" var="driver" itemValue="#{driver.id}" itemLabel="#{driver.user.username}"/>
+                    </p:selectOneMenu>
+
 
                 </h:panelGrid>
-                
+
                 <h:commandButton value="Create a Car" action="#{operatorService.doAddCar}">
                 </h:commandButton>
 

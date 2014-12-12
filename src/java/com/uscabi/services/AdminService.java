@@ -12,19 +12,15 @@ import com.uscabi.commons.Customer;
 import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
 import com.uscabi.commons.UserCredential;
-import com.uscabi.services.util.LoggingAOP;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.interceptor.Interceptor;
-import javax.interceptor.Interceptors;
 import javax.transaction.Transactional;
 
 /**
@@ -68,7 +64,7 @@ public class AdminService implements Serializable {
 
     @PostConstruct
     public void init() {
-        //this.selectedIncludePath = "/views/admin/operator.xhtml";
+        this.selectedIncludePath = "/views/admin/operator.xhtml";
         this.emailSubject = "USCabi Account Activation Link";
         this.emailMessage = "Your account has been created successfully";
 
@@ -143,7 +139,7 @@ public class AdminService implements Serializable {
     }
 
     public String doAddCar() {
-          driver=adminDAO.findDriver(driverId);
+        driver=adminDAO.findDriver(driverId);
         
         adminDAO.addCar(car, driver);
 

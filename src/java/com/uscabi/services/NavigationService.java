@@ -10,6 +10,7 @@ import com.uscabi.commons.userType;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -62,15 +63,19 @@ public class NavigationService implements Serializable {
      */
     public String redirectToWelcome(UserCredential user) {
         if (user.getUsertype().equals(userType.ADMIN)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("adminKey", user);       
             return "/secure/admin/home.xhtml?faces-redirect=true";
 
         } else if (user.getUsertype().equals(userType.CUSTOMER)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("customerKey", user);       
             return "/secure/customer/home.xhtml?faces-redirect=true";
 
         } else if (user.getUsertype().equals(userType.DRIVER)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("driverKey", user);       
             return "/secure/driver/home.xhtml?faces-redirect=true";
 
         } else if (user.getUsertype().equals(userType.OPERATOR)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("operatorKey", user);       
             return "/secure/operator/home.xhtml?faces-redirect=true";
 
         }

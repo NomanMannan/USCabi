@@ -7,6 +7,7 @@ package com.uscabi.clientservices;
 
 import com.uscabi.commons.Booking;
 import com.uscabi.commons.Driver;
+import com.uscabi.commons.Operator;
 import javax.ejb.Remote;
 
 /**
@@ -28,5 +29,8 @@ public interface IDriverService {
     public void rejectBooking(Driver driver, Booking booking);
 
     public void updateLocation(Driver driver);
+    
+    public Operator findOperator(String username);
+
     
 }
