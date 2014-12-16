@@ -27,8 +27,8 @@
             };
         </script>
 
+        <h:form enctype="multipart/form-data" id="form">
 
-        <h:form id="form">
             <p:panel id="panel">
                 <h3 style="background-color: #f5f5f5; padding: 5px 0px 8px 2px; margin-top: 0px;">Add Operator</h3>
                 <p:messages id="messages" />
@@ -59,11 +59,7 @@
                     <p:message for="email" display="tooltip" />
                     <h:outputText value="#{adminService.operator.email}" />
 
-
-                    <p:outputLabel for="image" value="Image:" />
-                    <p:inputText id="image" value="#{adminService.operator.image}" label="Image"/>
-                    <p:message for="image" />
-
+                    <h:outputLabel value="Image: "/><p:fileUpload value="#{adminService.uploadedFile}" mode="simple" />
 
                     <p:outputLabel for="dob" value="DOB:" />
                     <p:calendar id="dob" value="#{adminService.operator.dob}" label="DOB" pattern="dd-MM-yyyy" mask="true" />
@@ -146,12 +142,12 @@
                 <p:column headerText="Contact Number">
                     <h:outputText value="#{opr.contactNumber}" />
                 </p:column>
-                
+
                 <p:column style="width:32px;text-align: center">
-             <p:commandButton update="" oncomplete="PF('operatorDialog').show()" icon="ui-icon-search" title="View">
-                <f:setPropertyActionListener value="#{operator}" target="" />
-            </p:commandButton>
-        </p:column>
+                    <p:commandButton update="" oncomplete="PF('operatorDialog').show()" icon="ui-icon-search" title="View">
+                        <f:setPropertyActionListener value="#{operator}" target="" />
+                    </p:commandButton>
+                </p:column>
 
             </p:dataTable>
         </h:form>

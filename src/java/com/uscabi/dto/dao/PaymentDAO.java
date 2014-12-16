@@ -5,7 +5,6 @@
  */
 package com.uscabi.dto.dao;
 
-import com.uscabi.commons.Car;
 import com.uscabi.commons.Payment;
 import com.uscabi.dto.idao.GenericPersistenceDAO;
 import com.uscabi.dto.idao.IPaymentDAO;
@@ -20,7 +19,7 @@ import javax.persistence.Query;
  * @author noman-pc
  */
 @Stateless
-public class PaymentDAO extends GenericPersistenceDAO<Payment, Long> implements IPaymentDAO{
+public class PaymentDAO extends GenericPersistenceDAO<Payment, Long> implements IPaymentDAO {
 
     @PersistenceContext(unitName = "USCabiPU")
     private EntityManager em;
@@ -36,10 +35,12 @@ public class PaymentDAO extends GenericPersistenceDAO<Payment, Long> implements 
 
     @Override
     public List<Payment> findAllPaymentByOperator(String operatorUserName) {
-        Query mq = em.createQuery("Select c from Car c join Driver d join Operator o join UserCredential u where c.driver=d AND d.operator=o AND u.username = :username");
+
+        Query mq = em.createQuery("Select p from Payment p join Booking b join Car c join Driver d join Operator o join UserCredential u where p.booking=b AND b.car=c AND c.driver=d AND d.operator=o AND u.username = :username");
         mq.setParameter("username", operatorUserName);
         List<Payment> payments = mq.getResultList();
         return payments;
+
     }
 
 }

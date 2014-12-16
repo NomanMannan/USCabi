@@ -21,6 +21,8 @@ import com.uscabi.dto.idao.IPaymentDAO;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
@@ -52,6 +54,9 @@ public class OperatorDAO extends GenericPersistenceDAO<Operator, Long> implement
     @EJB
     private IPaymentDAO paymentDAO;
     
+    @EJB
+    private EmailSender emailSender;
+    
     private String driverCurrentStatus;
     
     @Override
@@ -62,16 +67,16 @@ public class OperatorDAO extends GenericPersistenceDAO<Operator, Long> implement
     public OperatorDAO() {
         super(Operator.class);
     }
-    
-    @Schedule(minute = "*/15")
-    public void driverStatusNotification() {
-        List<Driver> allDriver = driverDAO.findAll();
-        Iterator<Driver> itr = allDriver.iterator();
-        while (itr.hasNext()) {
-            Driver driver = itr.next();
-            driverCurrentStatus = driver.getDriverStatus();
-        }
-    }
+//    
+//    @Schedule(minute = "*/15")
+//    public void driverStatusNotification() {
+//        List<Driver> allDriver = driverDAO.findAll();
+//        Iterator<Driver> itr = allDriver.iterator();
+//        while (itr.hasNext()) {
+//            Driver driver = itr.next();
+//            driverCurrentStatus = driver.getDriverStatus();
+//        }
+//    }
     
     @Override
     public void updateOperator(Operator operator) {
@@ -100,14 +105,26 @@ public class OperatorDAO extends GenericPersistenceDAO<Operator, Long> implement
     }
     
     @Override
-    public Driver addDriver(Driver driver, String operatorUserName) {
+    public Driver addDriver(Driver driver, String operatorUserName, String image) {
         
         Date registrationDate = new Date();
         driver.setRegistrationDate(registrationDate);
         driver.getUser().setUsertype(userType.DRIVER);
-        driverDAO.create(driver);
         Operator operator=driverDAO.findOperator(operatorUserName);
         driver.setOperator(operator);
+        driver.setImage(image);
+        
+        
+        String emailMsg="Dear "+driver.getLastName()+",\nYour Driver account has been successfully created \n" + "Username" +driver.getUser().getUsername()+ "\n" + "Password" + driver.getUser().getPassword();
+        try {
+            emailSender.sendEmail(emailMsg , "USCabi Account", driver.getEmail(), "uscabimail@gmail.com");
+        } catch (Exception ex) {
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        driverDAO.create(driver);
+        
+        
         return driver;
     }
     

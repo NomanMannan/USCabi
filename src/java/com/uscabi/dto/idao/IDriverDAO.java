@@ -18,6 +18,7 @@ public interface IDriverDAO extends IGenericDAO<Driver, Long> {
     public List<Driver> findAllDriverByOperator(String operatorUserName);
     
     public Operator findOperator(String username);
-
+    
+    public Driver findDriverByUserName(String driverUserName);
 
 }

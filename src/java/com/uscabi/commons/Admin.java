@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.uscabi.commons;
 
 import java.io.Serializable;
@@ -16,13 +15,14 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Admin extends Person implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     public Admin() {
     }
 
-    public Admin(String firstName, String lastName, String contactNumber, Date registrationNumber, String email, byte[] image, Date dob, Address address, UserCredential user) {
+    public Admin(String firstName, String lastName, String contactNumber, Date registrationNumber, String email, String image, Date dob, Address address, UserCredential user) {
         super(firstName, lastName, contactNumber, registrationNumber, email, image, dob, address, user);
     }
- 
+
 }

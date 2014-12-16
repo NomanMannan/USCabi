@@ -5,25 +5,38 @@
  */
 package com.uscabi.dto.dao;
 
+import com.uscabi.clientservices.IDriverService;
+import com.uscabi.commons.Booking;
 import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
+import com.uscabi.commons.StatusLocation;
 import com.uscabi.dto.idao.GenericPersistenceDAO;
 import com.uscabi.dto.idao.IDriverDAO;
+import com.uscabi.dto.idao.IOperatorDAO;
+import com.uscabi.dto.idao.IStatusLocationDAO;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
  * @author noman-pc
  */
 @Stateless
-public class DriverDAO extends GenericPersistenceDAO<Driver, Long> implements IDriverDAO {
+public class DriverDAO extends GenericPersistenceDAO<Driver, Long> implements IDriverDAO, IDriverService {
+
+    @EJB
+    private IStatusLocationDAO statusLocationDAO;
+
+    @EJB
+    private IOperatorDAO operatorDAO;
+
+    @EJB
+    private IDriverDAO driverDAO;
 
     @PersistenceContext(unitName = "USCabiPU")
     private EntityManager em;
@@ -64,6 +77,55 @@ public class DriverDAO extends GenericPersistenceDAO<Driver, Long> implements ID
         Operator operator = (Operator) mq.getSingleResult();
 
         return operator;
+    }
+
+    @Override
+    public void addDriver(Driver driver) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateDriver(Driver driver) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void disableDriver(Driver driver) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void acceptBooking(Driver driver, Booking booking) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void rejectBooking(Driver driver, Booking booking) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateLocation(StatusLocation statusLocation, String driverUserName) {
+        Date statusUpdateDate = new Date();
+        statusLocation.setDateAndTime(statusUpdateDate);
+        Driver driver = driverDAO.findDriverByUserName(driverUserName);
+
+        statusLocation.setDriver(driver);
+
+        statusLocationDAO.create(statusLocation);
+
+    }
+
+    @Override
+    public Driver findDriverByUserName(String driverUserName) {
+
+        Query mq = em.createQuery("Select d from Driver d join UserCredential u where u.username = :username");
+        mq.setParameter("username", driverUserName);
+
+        Driver driver = (Driver) mq.getSingleResult();
+
+        return driver;
+
     }
 
 }

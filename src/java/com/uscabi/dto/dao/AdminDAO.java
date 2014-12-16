@@ -17,20 +17,19 @@ import com.uscabi.dto.idao.ICarDAO;
 import com.uscabi.dto.idao.ICustomerDAO;
 import com.uscabi.dto.idao.IDriverDAO;
 import com.uscabi.dto.idao.IOperatorDAO;
-import com.uscabi.services.util.MailService;
+import com.uscabi.dto.idao.IPaymentDAO;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Schedules;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Named;
-import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -55,6 +54,9 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     private SessionContext context;
 
     @EJB
+    private IAdminDAO adminDAO;
+
+    @EJB
     private IOperatorDAO operatorDAO;
 
     @EJB
@@ -68,6 +70,12 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @EJB
     private IBookingDAO bookingDAO;
+
+    @EJB
+    private IPaymentDAO paymentDAO;
+
+    @EJB
+    private EmailSender emailSender;
 
     private Payment payment;
 
@@ -101,11 +109,17 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     @Override
     public Admin addAdmin(Admin admin) {
         //this.adminDAO.create(admin);
-        return null;
+        Date registrationDate = new Date();
+        admin.setRegistrationDate(registrationDate);
+        admin.getUser().setUsertype(userType.ADMIN);
+        adminDAO.create(admin);
+
+        return admin;
+
     }
 
     @Override
-    public Operator addOperator(Operator operator) {
+    public Operator addOperator(Operator operator, String image) {
 //        if (!context.isCallerInRole("ADMIN")) {
 //            throw new SecurityException("Only Admin can create Operator!!!");
 //        } else {
@@ -113,9 +127,17 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
         operator.setRegistrationDate(registrationDate);
         operator.getUser().setUsertype(userType.OPERATOR);
         operator.setCompanyName("USCabi");
+        operator.setImage(image);
         operatorDAO.create(operator);
+        String emailMsg = "Dear " + operator.getLastName() + ",\n\nYour Operator account has been successfully created \n" + "Username: " + operator.getUser().getUsername() + "\n" + "Password: " + operator.getUser().getPassword();
+        try {
+            emailSender.sendEmail(emailMsg, "USCabi Account", operator.getEmail(), "uscabimail@gmail.com");
+        } catch (Exception ex) {
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return operator;
-        //}
+
     }
 
     @Override
@@ -129,11 +151,20 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     }
 
     @Override
-    public Customer addCustomer(Customer customer) {
+    public Customer addCustomer(Customer customer, String image) {
         Date registrationDate = new Date();
         customer.setRegistrationDate(registrationDate);
         customer.getUser().setUsertype(userType.CUSTOMER);
+        customer.setImage(image);
+
         customerDAO.create(customer);
+        String emailMsg = "Dear " + customer.getLastName() + ",\nYour Customer account has been successfully created \n" + "Username" + customer.getUser().getUsername() + "\n" + "Password" + customer.getUser().getPassword();
+        try {
+            emailSender.sendEmail(emailMsg, "USCabi Account", customer.getEmail(), "uscabimail@gmail.com");
+        } catch (Exception ex) {
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return customer;
     }
 
@@ -149,8 +180,8 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Car addCar(Car car, Driver driver) {
-        carDAO.create(car);
         car.setDriver(driver);
+        carDAO.create(car);
         return car;
     }
 
@@ -165,12 +196,21 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     }
 
     @Override
-    public Driver addDriver(Driver driver, Operator operator) {
+    public Driver addDriver(Driver driver, Operator operator, String image) {
         Date registrationDate = new Date();
         driver.setRegistrationDate(registrationDate);
         driver.getUser().setUsertype(userType.DRIVER);
-        driverDAO.create(driver);
+        driver.setImage(image);
         driver.setOperator(operator);
+
+        driverDAO.create(driver);
+
+        String emailMsg = "Dear " + driver.getLastName() + ",\nYour Driver account has been successfully created \n" + "Username" + driver.getUser().getUsername() + "\n" + "Password" + driver.getUser().getPassword();
+        try {
+            emailSender.sendEmail(emailMsg, "USCabi Account", driver.getEmail(), "uscabimail@gmail.com");
+        } catch (Exception ex) {
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         return driver;
     }
@@ -207,12 +247,12 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public Booking findBooking(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return bookingDAO.find(Booking.class, id);
     }
 
     @Override
     public Payment findPayment(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return paymentDAO.find(Payment.class, id);
     }
 
     @Override
@@ -242,7 +282,7 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
 
     @Override
     public List<Payment> findPayments() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return paymentDAO.findAll();
     }
 
     @Override
@@ -269,17 +309,5 @@ public class AdminDAO extends GenericPersistenceDAO<Admin, Long> implements IAdm
     @Override
     public UserCredential findUser(String username) {
         return userCredential;
-    }
-
-    @Override
-    @Asynchronous
-    public void sendMail(String recipient, String subject, String message) {
-        String statusMessage = "Message Sent";
-        try {
-            MailService.sendMessage(recipient, subject, message);
-        } catch (MessagingException ex) {
-            statusMessage = ex.getMessage();
-        }
-
     }
 }

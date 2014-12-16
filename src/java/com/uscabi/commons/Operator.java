@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.uscabi.commons;
 
 import java.io.Serializable;
@@ -18,25 +17,27 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author noman-pc
  */
 @Entity
 public class Operator extends Person implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @NotNull
     private String companyName;
     @Enumerated(EnumType.STRING)
     private OperatorType operatorType;
-    
+
     @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Driver> drivers;
 
     public Operator() {
     }
 
-    public Operator(String companyName, String firstName, String lastName, String contactNumber, Date registrationNumber, String email, byte[] image, Date dob, Address address, UserCredential user) {
+    public Operator(String companyName, String firstName, String lastName, String contactNumber, Date registrationNumber, String email, String image, Date dob, Address address, UserCredential user) {
         super(firstName, lastName, contactNumber, registrationNumber, email, image, dob, address, user);
         this.companyName = companyName;
     }
@@ -64,7 +65,5 @@ public class Operator extends Person implements Serializable {
     public void setDrivers(List<Driver> drivers) {
         this.drivers = drivers;
     }
-    
-    
-    
+
 }

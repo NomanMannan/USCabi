@@ -29,7 +29,7 @@ public interface IOperatorService {
 
     public void disableCar(Car car);
 
-    public Driver addDriver(Driver driver, String operatorUserName);
+    public Driver addDriver(Driver driver, String operatorUserName, String image);
 
     public void updateDriver(Driver driver);
 

@@ -25,10 +25,10 @@ public class Customer extends Person implements Serializable {
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String contactNumber, Date registrationDate, String email, byte[] image, Date dob, Address address, UserCredential user) {
+    public Customer(String firstName, String lastName, String contactNumber, Date registrationDate, String email, String image, Date dob, Address address, UserCredential user) {
         super(firstName, lastName, contactNumber, registrationDate, email, image, dob, address, user);
     }
-    
+
     public List<Booking> getBookings() {
         return bookings;
     }

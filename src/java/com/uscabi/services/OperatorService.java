@@ -10,9 +10,12 @@ import com.uscabi.commons.Address;
 import com.uscabi.commons.Booking;
 import com.uscabi.commons.Car;
 import com.uscabi.commons.Driver;
-import com.uscabi.commons.Operator;
+import com.uscabi.commons.Payment;
 import com.uscabi.commons.UserCredential;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -22,11 +25,13 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.transaction.Transactional;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
  * @author noman-pc
  */
+
 @ManagedBean
 @SessionScoped
 @Transactional
@@ -34,16 +39,20 @@ public class OperatorService implements Serializable {
 
     @EJB
     private IOperatorService operatorDAO;
+    
+    private UploadedFile uploadedFile;
+
 
     private UserCredential user;
-    
-    private Operator operator;
 
+    //private Operator operator;
     private Driver driver;
 
     private Car car;
-    
+
     private Booking booking;
+
+    private Payment payment;
 
     private Long driverId;
 
@@ -66,11 +75,10 @@ public class OperatorService implements Serializable {
     @PostConstruct
     public void init() {
         this.selectedIncludePath = "/views/operator/driver.xhtml";
-
         //this.operatorUserName = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
         //this.operatorUserName = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
         //System.out.print(operatorUserName);
-        UserCredential user = (UserCredential) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("operatorKey");
+        this.user = (UserCredential) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("operatorKey");
         this.operatorUserName = user.getUsername();
         this.driver = new Driver();
         driver.setAddress(new Address());
@@ -82,9 +90,14 @@ public class OperatorService implements Serializable {
 
     }
 
-    public String doAddDriver() {
+    public String doAddDriver() throws IOException {
+        
+        String fileSource = "E:\\MSCS\\EA\\USCabiProject\\images\\" + uploadedFile.getFileName();
+        String fileDestination = "E:\\MSCS\\EA\\USCabiProject\\USCabi\\web\\resources\\images\\" + uploadedFile.getFileName();
+        Files.move(Paths.get(fileSource), Paths.get(fileDestination));
+        String image = uploadedFile.getFileName();
 
-        operatorDAO.addDriver(driver,operatorUserName);
+        operatorDAO.addDriver(driver, operatorUserName, image);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
 
@@ -100,6 +113,8 @@ public class OperatorService implements Serializable {
     }
 
     public String doAddCar() {
+        
+        this.driverList = operatorDAO.findDrivers(operatorUserName);
 
         driver = operatorDAO.findDriver(driverId);
 
@@ -116,10 +131,16 @@ public class OperatorService implements Serializable {
         return operatorDAO.findCars(operatorUserName);
 
     }
-    
+
     public List<Booking> doFindAllBooking() {
 
         return operatorDAO.findBookings(operatorUserName);
+
+    }
+
+    public List<Payment> doFindAllPayment() {
+
+        return operatorDAO.findPayments(operatorUserName);
 
     }
 
@@ -163,6 +184,14 @@ public class OperatorService implements Serializable {
         this.booking = booking;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     public String getSelectedIncludePath() {
         return selectedIncludePath;
     }
@@ -178,9 +207,17 @@ public class OperatorService implements Serializable {
     public void manageDriver(ActionEvent e) {
         setSelectedIncludePath("/views/operator/driver.xhtml");
     }
-     
+
     public void manageBooking(ActionEvent e) {
-        setSelectedIncludePath("/views/operator/booking.xhtml");
+        setSelectedIncludePath("/views/operator/bookings.xhtml");
+    }
+
+    public void managePayment(ActionEvent e) {
+        setSelectedIncludePath("/views/operator/payments.xhtml");
+    }
+    
+    public void manageMap(ActionEvent e) {
+        setSelectedIncludePath("/views/operator/map.xhtml");
     }
 
 }

@@ -35,26 +35,27 @@ public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull
+    
     private String firstName;
-    @NotNull
+  
     private String lastName;
-    @NotNull
+   
     private String contactNumber;
-    @NotNull
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date registrationDate;
-    @NotNull
+    
     private String email;
-    private byte[] image;
-    @NotNull
+    private String image;
+   
     @Temporal(TemporalType.DATE)
     private Date dob;
+    
     @Embedded
     private Address address;
-    
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserCredential user;
@@ -62,7 +63,7 @@ public class Person implements Serializable {
     public Person() {
     }
 
-    public Person(String firstName, String lastName, String contactNumber, Date registrationNumber, String email, byte[] image, Date dob, Address address, UserCredential user) {
+    public Person(String firstName, String lastName, String contactNumber, Date registrationNumber, String email, String image, Date dob, Address address, UserCredential user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.contactNumber = contactNumber;
@@ -122,11 +123,11 @@ public class Person implements Serializable {
         this.email = email;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -7,6 +7,8 @@ package com.uscabi.commons;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,6 +41,12 @@ public class Booking implements Serializable {
     private boolean favouriteAddress;
     @NotNull
     private String source;
+
+    private double distance;
+    
+    @Enumerated(EnumType.STRING)
+    private BookingStatus bookingStatus;
+
     @OneToOne(mappedBy = "booking")
     private Payment payment;
     @ManyToOne
@@ -50,7 +58,7 @@ public class Booking implements Serializable {
     public Booking() {
     }
 
-    public Booking(String destination, String noteToDriver, double tipAmount, int noOfPeople, int noOfBagage, int noOfKids, boolean preferDisabled, boolean favouriteAddress, long customerId, long driverId, String source, Customer customer, Car car) {
+    public Booking(String destination, String noteToDriver, double tipAmount, int noOfPeople, int noOfBagage, int noOfKids, boolean preferDisabled, boolean favouriteAddress, String source, double distance, BookingStatus bookingStatus, Payment payment, Customer customer, Car car) {
 
         this.destination = destination;
         this.noteToDriver = noteToDriver;
@@ -61,9 +69,14 @@ public class Booking implements Serializable {
         this.preferDisabled = preferDisabled;
         this.favouriteAddress = favouriteAddress;
         this.source = source;
+        this.distance = distance;
+        this.bookingStatus = bookingStatus;
+        this.payment = payment;
         this.customer = customer;
         this.car = car;
+        
     }
+
 
     public String getDestination() {
         return destination;
@@ -168,6 +181,23 @@ public class Booking implements Serializable {
     public void setCar(Car car) {
         this.car = car;
     }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public BookingStatus getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+    
 
     @Override
     public int hashCode() {

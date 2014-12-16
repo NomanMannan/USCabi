@@ -6,7 +6,7 @@
 package com.uscabi.dto.dao;
 
 import com.uscabi.commons.Booking;
-import com.uscabi.commons.Car;
+import com.uscabi.commons.Customer;
 import com.uscabi.dto.idao.GenericPersistenceDAO;
 import com.uscabi.dto.idao.IBookingDAO;
 import java.util.List;
@@ -36,10 +36,22 @@ public class BookingDAO extends GenericPersistenceDAO<Booking, Long> implements 
 
     @Override
     public List<Booking> findAllBookingByOperator(String operatorUserName) {
-        Query mq = em.createQuery("Select c from Car c join Driver d join Operator o join UserCredential u where c.driver=d AND d.operator=o AND u.username = :username");
+
+        Query mq = em.createQuery("Select b from Booking b join Car c join Driver d join Operator o join UserCredential u where b.car=c AND c.driver=d AND d.operator=o AND u.username = :username");
         mq.setParameter("username", operatorUserName);
         List<Booking> bookings = mq.getResultList();
         return bookings;
+    }
+
+    @Override
+    public Customer findCustomer(String customerUserName) {
+
+        Query mq = em.createQuery("Select c from Customer c join UserCredential u where u.username = :username");
+        mq.setParameter("username", customerUserName);
+
+        Customer customer = (Customer) mq.getSingleResult();
+
+        return customer;
     }
 
 }

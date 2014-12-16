@@ -24,15 +24,14 @@ public interface IAdminService {
 
     public Admin addAdmin(Admin admin);
     
-
-    public Operator addOperator(Operator operator);
+    public Operator addOperator(Operator operator, String image);
 
     public void updateOperator(Operator operator);
 
     public void disableOperator(Operator operator);
     
 
-    public Customer addCustomer(Customer customer);
+    public Customer addCustomer(Customer customer, String image);
 
     public void updateCustomer(Customer customer);
 
@@ -46,7 +45,7 @@ public interface IAdminService {
     public void disableCar(Car car);
     
 
-    public Driver addDriver(Driver driver, Operator operator);
+    public Driver addDriver(Driver driver, Operator operator, String image);
 
     public void updateDriver(Driver driver);
 
@@ -89,6 +88,4 @@ public interface IAdminService {
 
     public UserCredential findUser(String username);
     
-    public void sendMail(String recipient, String subject, String message);
-
 }

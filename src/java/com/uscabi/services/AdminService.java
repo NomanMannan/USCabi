@@ -7,12 +7,18 @@ package com.uscabi.services;
 
 import com.uscabi.clientservices.IAdminService;
 import com.uscabi.commons.Address;
+import com.uscabi.commons.Admin;
+import com.uscabi.commons.Booking;
 import com.uscabi.commons.Car;
 import com.uscabi.commons.Customer;
 import com.uscabi.commons.Driver;
 import com.uscabi.commons.Operator;
+import com.uscabi.commons.Payment;
 import com.uscabi.commons.UserCredential;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -22,6 +28,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.transaction.Transactional;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -31,9 +38,13 @@ import javax.transaction.Transactional;
 @SessionScoped
 @Transactional
 public class AdminService implements Serializable {
-
+    
     @EJB
     private IAdminService adminDAO;
+
+    private UploadedFile uploadedFile;
+    
+    private Admin admin;
 
     private Operator operator;
 
@@ -43,19 +54,19 @@ public class AdminService implements Serializable {
 
     private Car car;
 
+    private Booking booking;
+
+    private Payment payment;
+
     private String selectedIncludePath;
-    
+
     private Long operatorId;
-    
+
     private List<Operator> operatorList;
-    
+
     private Long driverId;
-    
+
     private List<Driver> driverList;
-
-    private String emailSubject;
-
-    private String emailMessage;
 
 
     public AdminService() {
@@ -65,8 +76,10 @@ public class AdminService implements Serializable {
     @PostConstruct
     public void init() {
         this.selectedIncludePath = "/views/admin/operator.xhtml";
-        this.emailSubject = "USCabi Account Activation Link";
-        this.emailMessage = "Your account has been created successfully";
+               
+        this.admin = new Admin();
+        admin.setAddress(new Address());
+        admin.setUser(new UserCredential());
 
         this.operator = new Operator();
         operator.setAddress(new Address());
@@ -83,17 +96,34 @@ public class AdminService implements Serializable {
 
         this.car = new Car();
         car.setDriver(new Driver());
-        
-        this.operatorList= adminDAO.findOperators();
-        this.driverList=adminDAO.findDrivers();
 
+        this.operatorList = adminDAO.findOperators();
+        this.driverList = adminDAO.findDrivers();
+
+    }
+    
+    
+    public String doAddAdmin() throws IOException, Exception {
+
+        adminDAO.addAdmin(admin);
+        //adminDAO.sendMail(operator.getEmail(), emailSubject, emailMessage);
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Admin Created", ""));
+        setSelectedIncludePath("/views/admin/operator.xhtml");
+
+        return "/secure/admin/home.xhtml";
     }
 
     //@Interceptors(LoggingAOP.class)
-    public String doAddOperator() {
+    public String doAddOperator() throws IOException, Exception {
 
-        adminDAO.addOperator(operator);
-        adminDAO.sendMail(operator.getEmail(), emailSubject, emailMessage);
+        String fileSource = "E:\\MSCS\\EA\\USCabiProject\\images\\" + uploadedFile.getFileName();
+        String fileDestination = "E:\\MSCS\\EA\\USCabiProject\\USCabi\\web\\resources\\images\\" + uploadedFile.getFileName();
+        Files.move(Paths.get(fileSource), Paths.get(fileDestination));
+        String image = uploadedFile.getFileName();
+
+        adminDAO.addOperator(operator, image);
+        //adminDAO.sendMail(operator.getEmail(), emailSubject, emailMessage);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Operator Created", "The Operator of the company " + operator.getCompanyName() + "has been created with id" + operator.getId()));
         setSelectedIncludePath("/views/admin/operator.xhtml");
@@ -105,11 +135,17 @@ public class AdminService implements Serializable {
         return adminDAO.findOperators();
     }
 
-    public String doAddDriver() {
-        operator=adminDAO.findOperator(operatorId);
+    public String doAddDriver() throws IOException {
+        
+        
+        String fileSource = "E:\\MSCS\\EA\\USCabiProject\\images\\" + uploadedFile.getFileName();
+        String fileDestination = "E:\\MSCS\\EA\\USCabiProject\\USCabi\\web\\resources\\images\\" + uploadedFile.getFileName();
+        Files.move(Paths.get(fileSource), Paths.get(fileDestination));
+        String image = uploadedFile.getFileName();
 
-        adminDAO.addDriver(driver, operator);
-        adminDAO.sendMail(driver.getEmail(), emailSubject, emailMessage);
+        operator = adminDAO.findOperator(operatorId);
+
+        adminDAO.addDriver(driver, operator, image);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Driver Created", "The Driver of the name " + driver.getLastName() + "has been created with id" + driver.getId()));
         setSelectedIncludePath("/views/admin/driver.xhtml");
@@ -122,10 +158,14 @@ public class AdminService implements Serializable {
 
     }
 
-    public String doAddCustomer() {
+    public String doAddCustomer() throws IOException {
+                
+        String fileSource = "E:\\MSCS\\EA\\USCabiProject\\images\\" + uploadedFile.getFileName();
+        String fileDestination = "E:\\MSCS\\EA\\USCabiProject\\USCabi\\web\\resources\\images\\" + uploadedFile.getFileName();
+        Files.move(Paths.get(fileSource), Paths.get(fileDestination));
+        String image = uploadedFile.getFileName();
 
-        adminDAO.addCustomer(customer);
-        adminDAO.sendMail(customer.getEmail(), emailSubject, emailMessage);
+        adminDAO.addCustomer(customer, image);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Created", "The Customer of the name " + customer.getLastName() + "has been created with id" + customer.getId()));
         setSelectedIncludePath("/views/admin/customer.xhtml");
@@ -139,8 +179,11 @@ public class AdminService implements Serializable {
     }
 
     public String doAddCar() {
-        driver=adminDAO.findDriver(driverId);
-        
+
+        this.driverList = adminDAO.findDrivers();
+
+        driver = adminDAO.findDriver(driverId);
+
         adminDAO.addCar(car, driver);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Created", "The Car of the number " + car.getCarNumber() + "has been created with id" + car.getId()));
@@ -151,6 +194,18 @@ public class AdminService implements Serializable {
     public List<Car> doFindAllCar() {
 
         return adminDAO.findCars();
+
+    }
+
+    public List<Booking> doFindAllBooking() {
+
+        return adminDAO.findBookings();
+
+    }
+
+    public List<Payment> doFindAllPayment() {
+
+        return adminDAO.findPayments();
 
     }
 
@@ -202,7 +257,6 @@ public class AdminService implements Serializable {
         this.operatorId = operatorId;
     }
 
-    
     public List<Operator> getOperatorList() {
         return operatorList;
     }
@@ -226,6 +280,38 @@ public class AdminService implements Serializable {
     public void setDriverList(List<Driver> driverList) {
         this.driverList = driverList;
     }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
     
 
     public void manageOperator(ActionEvent e) {
@@ -241,6 +327,19 @@ public class AdminService implements Serializable {
     }
 
     public void manageDriver(ActionEvent e) {
+        this.operatorList = adminDAO.findOperators();
         setSelectedIncludePath("/views/admin/driver.xhtml");
+    }
+
+    public void manageBooking(ActionEvent e) {
+        setSelectedIncludePath("/views/admin/bookings.xhtml");
+    }
+
+    public void managePayment(ActionEvent e) {
+        setSelectedIncludePath("/views/admin/payments.xhtml");
+    }
+
+    public void manageMap(ActionEvent e) {
+        setSelectedIncludePath("/views/admin/map.xhtml");
     }
 }

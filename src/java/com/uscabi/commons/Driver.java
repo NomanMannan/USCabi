@@ -8,6 +8,8 @@ package com.uscabi.commons;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -36,18 +38,19 @@ public class Driver extends Person implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     @NotNull
     private Date publicLiabilityInsuranceRenewalDate;
-    private String driverStatus;
-    
+    @Enumerated(EnumType.STRING)
+    private DriverStatus driverStatus;
+
     @OneToOne(mappedBy = "driver")
     private Car car;
-    
+
     @ManyToOne
     private Operator operator;
 
     public Driver() {
     }
 
-    public Driver(String drivingLicenseNo, Date licenseExpireDate, String registerCouncil, String badgeLicenseNo, Date badgeExpireDate, Date publicLiabilityInsuranceRenewalDate, String driverStatus, Long id, String firstName, String lastName, String contactNumber, Date registrationNumber, String email, byte[] image, Date dob, Address address, UserCredential user) {
+    public Driver(String drivingLicenseNo, Date licenseExpireDate, String registerCouncil, String badgeLicenseNo, Date badgeExpireDate, Date publicLiabilityInsuranceRenewalDate, DriverStatus driverStatus, Car car, Operator operator, String firstName, String lastName, String contactNumber, Date registrationNumber, String email, String image, Date dob, Address address, UserCredential user) {
         super(firstName, lastName, contactNumber, registrationNumber, email, image, dob, address, user);
         this.drivingLicenseNo = drivingLicenseNo;
         this.licenseExpireDate = licenseExpireDate;
@@ -56,6 +59,8 @@ public class Driver extends Person implements Serializable {
         this.badgeExpireDate = badgeExpireDate;
         this.publicLiabilityInsuranceRenewalDate = publicLiabilityInsuranceRenewalDate;
         this.driverStatus = driverStatus;
+        this.car = car;
+        this.operator = operator;
     }
 
     public String getDrivingLicenseNo() {
@@ -106,11 +111,11 @@ public class Driver extends Person implements Serializable {
         this.publicLiabilityInsuranceRenewalDate = publicLiabilityInsuranceRenewalDate;
     }
 
-    public String getDriverStatus() {
+    public DriverStatus getDriverStatus() {
         return driverStatus;
     }
 
-    public void setDriverStatus(String driverStatus) {
+    public void setDriverStatus(DriverStatus driverStatus) {
         this.driverStatus = driverStatus;
     }
 
@@ -129,7 +134,5 @@ public class Driver extends Person implements Serializable {
     public void setOperator(Operator operator) {
         this.operator = operator;
     }
-    
-    
-    
+
 }

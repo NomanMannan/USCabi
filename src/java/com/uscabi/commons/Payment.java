@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.uscabi.commons;
 
 import java.io.Serializable;
@@ -22,21 +21,19 @@ import javax.persistence.OneToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Payment implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    
-//    @OneToOne(mappedBy = "user")
-//    private Customer customer;
+    
+    private double amount;
+
     @OneToOne
     private Booking booking;
 
     public Payment() {
     }
-    
-    
-    
 
     public Long getId() {
         return id;
@@ -45,24 +42,22 @@ public class Payment implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-//
-//    public Customer getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
 
-//    public Booking getBooking() {
-//        return booking;
-//    }
-//
-//    public void setBooking(Booking booking) {
-//        this.booking = booking;
-//    }
-//    
-//    
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
 
     @Override
     public int hashCode() {
@@ -88,5 +83,5 @@ public class Payment implements Serializable {
     public String toString() {
         return "com.uscabi.entities.Payment[ id=" + id + " ]";
     }
-    
+
 }
